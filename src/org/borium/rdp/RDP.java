@@ -1,6 +1,7 @@
 package org.borium.rdp;
 
 import static org.borium.rdp.Arg.*;
+import static org.borium.rdp.RdpAux.*;
 import static org.borium.rdp.Text.*;
 import static org.borium.rdp.Text.TextMessageType.*;
 
@@ -24,9 +25,11 @@ public class RDP
 	private static Pointer<Boolean> rdp_symbol_echo = new Pointer<>(false); // symbol echo flag
 	private static Pointer<Boolean> rdp_verbose = new Pointer<>(false); // verbosity flag
 
+	private static int rdp_sourcefilenumber;
+
 	public static void main(String[] args)
 	{
-		// clock_t rdp_finish_time, rdp_start_time = clock();
+		long rdp_start_time = System.currentTimeMillis();
 
 		Pointer<Boolean> rdp_symbol_statistics = new Pointer<>(false); // show symbol_ table statistics flag
 		// rdp_line_echo_all = 0, /* make a listing on all passes flag */
@@ -39,8 +42,8 @@ public class RDP
 
 		Pointer<Integer> rdp_tabwidth = new Pointer<>(8); // tab expansion width
 
-		// char* rdp_vcg_filename = NULL; /* filename for -V option */
-		//
+		Pointer<String> rdp_vcg_filename = new Pointer<>(null); // filename for -V option
+
 		// rdp_tree_node_data* rdp_tree = (rdp_tree_node_data*) graph_insert_graph("RDP derivation tree"); /* hook for
 		// derivation tree */
 		// rdp_tree_node_data* rdp_tree_root;
@@ -58,20 +61,22 @@ public class RDP
 		arg_numeric('t', "Tab expansion width (default " + rdp_tabwidth.value() + ")", rdp_tabwidth);
 		arg_numeric('T', "Text buffer size in bytes for scanner (default " + rdp_textsize.value() + ")", rdp_textsize);
 		arg_boolean('v', "Set verbose mode", rdp_verbose);
-		// arg_string('V', "Write derivation tree to filename in VCG format", rdp_vcg_filename);
+		arg_string('V', "Write derivation tree to filename in VCG format", rdp_vcg_filename);
 		arg_message("");
-		// arg_boolean('e', "Write out expanded BNF along with first and follow sets", rdp_expanded);
-		// arg_boolean('E', "Add rule name to error messages in generated parser", rdp_error_production_name);
-		// arg_boolean('F', "Force creation of output files", rdp_force);
-		// arg_boolean('p', "Make parser only (omit semantic actions from generated code)", rdp_parser_only);
-		// arg_boolean('R', "Add rule entry and exit messages", rdp_trace);
+		arg_boolean('e', "Write out expanded BNF along with first and follow sets", rdp_expanded);
+		arg_boolean('E', "Add rule name to error messages in generated parser", rdp_error_production_name);
+		arg_boolean('F', "Force creation of output files", rdp_force);
+		arg_boolean('p', "Make parser only (omit semantic actions from generated code)", rdp_parser_only);
+		arg_boolean('R', "Add rule entry and exit messages", rdp_trace);
 
 		rdp_sourcefilenames = arg_process(args);
 
-		// /* Fix up filetypes */
-		// for (rdp_sourcefilenumber = 0; rdp_sourcefilenames[rdp_sourcefilenumber] != NULL; rdp_sourcefilenumber++)
-		// rdp_sourcefilenames[rdp_sourcefilenumber] = text_default_filetype(rdp_sourcefilenames[rdp_sourcefilenumber],
-		// "bnf");
+		// Fix up filetypes
+		for (rdp_sourcefilenumber = 0; rdp_sourcefilenumber < rdp_sourcefilenames.length; rdp_sourcefilenumber++)
+		{
+			rdp_sourcefilenames[rdp_sourcefilenumber] = text_default_filetype(rdp_sourcefilenames[rdp_sourcefilenumber],
+					"bnf");
+		}
 
 		if (rdp_filter.value())
 		{
@@ -150,12 +155,11 @@ public class RDP
 		//
 		// }
 		// text_print_total_errors();
-		// if (rdp_verbose)
-		// {
-		// rdp_finish_time = clock();
-		// text_message(TEXT_INFO, "%.3f CPU seconds used\n", ((double) (rdp_finish_time-rdp_start_time)) /
-		// CLOCKS_PER_SEC);
-		// }
+		if (rdp_verbose.value() || true)
+		{
+			long rdp_finish_time = System.currentTimeMillis();
+			System.out.println("Time: " + (double) (rdp_finish_time - rdp_start_time) / 1000);
+		}
 		// return rdp_error_return;
 		// TODO Auto-generated method stub
 		throw new RuntimeException();

@@ -58,6 +58,20 @@ public class Text
 	/** pointer to current source character */
 	static int text_current;
 
+	public static String text_default_filetype(String fname, String ftype)
+	{
+		if (ftype.length() == 0)
+		{
+			return fname;
+		}
+		String fullname = fname;
+		if (fullname.indexOf('.') == -1)
+		{
+			fullname += "." + ftype;
+		}
+		return fullname;
+	}
+
 	public static int text_message(TextMessageType type, String message)
 	{
 		if (message == null)
