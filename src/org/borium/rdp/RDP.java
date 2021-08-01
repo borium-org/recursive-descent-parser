@@ -1,6 +1,8 @@
 package org.borium.rdp;
 
 import static org.borium.rdp.Arg.*;
+import static org.borium.rdp.Text.*;
+import static org.borium.rdp.Text.TextMessageType.*;
 
 import java.text.*;
 import java.util.*;
@@ -13,8 +15,9 @@ public class RDP
 	private static final String RDP_STAMP = "Generated on Sep 19 2015 11:45:00 and compiled on " + __DATE__ + " at "
 			+ __TIME__;
 
-	// char*rdp_sourcefilename, /* current source file name */
-	// **rdp_sourcefilenames, /* array of source file names */
+	@SuppressWarnings("unused")
+	private static String rdp_sourcefilename; // current source file name
+	private static String[] rdp_sourcefilenames; // array of source file names
 
 	private static Pointer<String> rdp_outputfilename = new Pointer<>("rdparser"); // output file name
 
@@ -63,25 +66,24 @@ public class RDP
 		// arg_boolean('p', "Make parser only (omit semantic actions from generated code)", rdp_parser_only);
 		// arg_boolean('R', "Add rule entry and exit messages", rdp_trace);
 
-		// rdp_sourcefilenames = arg_process(argc, argv);
-		//
+		rdp_sourcefilenames = arg_process(args);
+
 		// /* Fix up filetypes */
 		// for (rdp_sourcefilenumber = 0; rdp_sourcefilenames[rdp_sourcefilenumber] != NULL; rdp_sourcefilenumber++)
 		// rdp_sourcefilenames[rdp_sourcefilenumber] = text_default_filetype(rdp_sourcefilenames[rdp_sourcefilenumber],
 		// "bnf");
-		//
-		// if (rdp_filter)
-		// {
-		// rdp_sourcefilenames[0] = "-";
-		// rdp_outputfilename = "-";
-		// rdp_sourcefilenames[1] = NULL; /* make sure no further filenames are taken from the array */
-		//
-		// }
-		// if ((rdp_sourcefilename = rdp_sourcefilenames[0]) == NULL)
-		arg_help("no source files specified");
 
-		// if (rdp_sourcefilenames[1] != NULL)
-		// text_message(TEXT_FATAL, "multiple source files not allowed\n");
+		if (rdp_filter.value())
+		{
+			rdp_sourcefilenames = new String[] { "-" };
+			rdp_outputfilename.set("-");
+		}
+
+		if (rdp_sourcefilenames.length == 0)
+			arg_help("no source files specified");
+		rdp_sourcefilename = rdp_sourcefilenames[0];
+		if (rdp_sourcefilenames.length != 1)
+			text_message(TEXT_FATAL, "multiple source files not allowed\n");
 		// text_init(rdp_textsize, 50, 120, (int) rdp_tabwidth);
 		// scan_init(0, 0, 1, rdp_symbol_echo, rdp_tokens);
 		// if (rdp_lexicalise)

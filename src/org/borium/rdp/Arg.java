@@ -2,6 +2,8 @@ package org.borium.rdp;
 
 import static org.borium.rdp.Arg.ArgKind.*;
 
+import java.util.*;
+
 public class Arg
 {
 	protected enum ArgKind
@@ -49,6 +51,49 @@ public class Arg
 	public static void arg_numeric(char key, String description, Pointer<Integer> unsignedvalue)
 	{
 		add_node(ARG_NUMERIC, key, description, null, unsignedvalue, null);
+	}
+
+	public static String[] arg_process(String[] args)
+	{
+		ArrayList<String> ret = new ArrayList<>();
+		for (String arg : args)
+		{
+			if (arg.charAt(0) == '-')
+			{
+				if (arg.length() < 2)
+				{
+					arg_help("bad command line argument");
+				}
+				arg_data temp = base;
+				while (temp.next != null && temp.key != arg.charAt(1))
+				{
+					temp = temp.next;
+				}
+				if (temp.key != arg.charAt(1))
+				{
+					arg_help("unknown command line argument");
+				}
+				switch (temp.kind)
+				{
+				case ARG_BOOLEAN:
+					temp.intvalue.set(!temp.intvalue.value());
+					break;
+				case ARG_NUMERIC:
+					temp.unsignedvalue.set(Integer.parseInt(arg.substring(2)));
+					break;
+				case ARG_STRING:
+					temp.str.set(arg.substring(2));
+					break;
+				default:
+					break;
+				}
+			}
+			else
+			{
+				ret.add(arg);
+			}
+		}
+		return ret.toArray(new String[ret.size()]);
 	}
 
 	public static void arg_string(char key, String description, Pointer<String> str)
