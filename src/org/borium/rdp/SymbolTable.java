@@ -22,4 +22,9 @@ public class SymbolTable
 
 	/** pointer to last declared symbol table */
 	SymbolTable next;
+
+	int hash(int prime, String key)
+	{
+		return compareHashPrint.hash(prime, key);
+	}
 }

@@ -5,9 +5,8 @@ import static org.borium.rdp.Text.*;
 
 public class Scan
 {
-	public static class ScanData
+	public static class ScanData extends Symbol
 	{
-		String id;
 		int token;
 		int extended;
 		ScanCommentBlock comment_block;
@@ -89,6 +88,19 @@ public class Scan
 	public static void scan_lexicalise()
 	{
 		scan_lexicalise_flag = true;
+	}
+
+	public static void scan_load_keyword(String id1, String id2, int token, int extended)
+	{
+		ScanData d = new ScanData();
+		d.id = text_insert_string(id1);
+		if (id2 != null)
+		{
+			text_insert_string(id2);
+		}
+		d.token = token;
+		d.extended = extended;
+		symbol_insert_symbol(scan_table, d);
 	}
 
 	private static void scan_insert_comment_block(String pattern, int column, int sequence_number)
