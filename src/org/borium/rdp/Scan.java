@@ -33,6 +33,24 @@ public class Scan
 		ScanCommentBlock previous;
 	}
 
+	static final int SCAN_P_IGNORE = 0;
+	static final int SCAN_P_ID = 1;
+	static final int SCAN_P_INTEGER = 2;
+	static final int SCAN_P_REAL = 3;
+	static final int SCAN_P_CHAR = 4;
+	static final int SCAN_P_CHAR_ESC = 5;
+	static final int SCAN_P_STRING = 6;
+	static final int SCAN_P_STRING_ESC = 7;
+	static final int SCAN_P_COMMENT = 8;
+	static final int SCAN_P_COMMENT_VISIBLE = 9;
+	static final int SCAN_P_COMMENT_NEST = 10;
+	static final int SCAN_P_COMMENT_NEST_VISIBLE = 11;
+	static final int SCAN_P_COMMENT_LINE = 12;
+	static final int SCAN_P_COMMENT_LINE_VISIBLE = 13;
+	static final int SCAN_P_EOF = 14;
+	static final int SCAN_P_EOLN = 15;
+	static final int SCAN_P_TOP = 16;
+
 	@SuppressWarnings("unused")
 	private static boolean scan_case_insensitive = false;
 	@SuppressWarnings("unused")
@@ -49,6 +67,8 @@ public class Scan
 	private static ScanCommentBlock last_comment_block;
 	@SuppressWarnings("unused")
 	private static SymbolTable scan_table;
+	@SuppressWarnings("unused")
+	private static boolean scan_lexicalise_flag = false;
 
 	public static void scan_init(boolean case_insensitive, boolean newline_visible, boolean show_skips,
 			boolean symbol_echo, String[] token_names)
@@ -64,6 +84,11 @@ public class Scan
 		text_scan_data = new ScanData();
 		scan_table = symbol_new_table("scan table", 101, 31, new CompareHashPrint());
 		scan_insert_comment_block("", 0, 0);
+	}
+
+	public static void scan_lexicalise()
+	{
+		scan_lexicalise_flag = true;
 	}
 
 	private static void scan_insert_comment_block(String pattern, int column, int sequence_number)
