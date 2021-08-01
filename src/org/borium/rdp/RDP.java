@@ -93,6 +93,8 @@ public class RDP
 	private static final String RDP_STAMP = "Generated on Sep 19 2015 11:45:00 and compiled on " + __DATE__ + " at "
 			+ __TIME__;
 
+	private static final int RDP_PASSES = 2;
+
 	static String rdp_sourcefilename; // current source file name
 	private static String[] rdp_sourcefilenames; // array of source file names
 
@@ -180,12 +182,18 @@ public class RDP
 	static SymbolTable tokens = null;
 	static SymbolTable rdp = null;
 
+	private static int rdp_pass;
+
+	/** Tree update function flag for noterminal nodes */
+	@SuppressWarnings("unused")
+	private static boolean rdp_tree_update;
+
 	public static void main(String[] args)
 	{
 		long rdp_start_time = System.currentTimeMillis();
 
 		Pointer<Boolean> rdp_symbol_statistics = new Pointer<>(false); // show symbol_ table statistics flag
-		// rdp_line_echo_all = 0, /* make a listing on all passes flag */
+		boolean rdp_line_echo_all = false; // make a listing on all passes flag
 		Pointer<Boolean> rdp_filter = new Pointer<>(false); // filter flag
 		Pointer<Boolean> rdp_line_echo = new Pointer<>(false); // make listing flag
 
@@ -253,30 +261,31 @@ public class RDP
 		rdp_set_initialise();
 		rdp_load_keywords();
 		rdp_pre_parse();
-		// if (rdp_verbose)
-		// text_printf("\nRecursive descent parser generator V1.65 (c) Adrian Johnstone 2000\n" RDP_STAMP "\n\n");
-		// for (rdp_pass = 1; rdp_pass <= RDP_PASSES; rdp_pass++)
-		// {
-		// rdp_tree_update = rdp_pass == RDP_PASSES;
-		// text_echo(rdp_line_echo_all || (rdp_line_echo && rdp_pass == RDP_PASSES));
-		//
-		// for (rdp_sourcefilenumber = 0; (rdp_sourcefilename = rdp_sourcefilenames[rdp_sourcefilenumber]) != NULL;
-		// rdp_sourcefilenumber++)
-		// {
-		// if (text_open(rdp_sourcefilename) == NULL)
-		// arg_help("unable to open source file");
-		//
-		// text_get_char();
-		// scan_();
-		//
-		// unit(rdp_tree_root = rdp_add_node("unit", rdp_tree)); /* call parser at top level */
-		// if (text_total_errors() != 0)
-		// text_message(TEXT_FATAL, "error%s detected in source file 'pÿ'\n", text_total_errors() == 1 ? "" : "s",
-		// rdp_sourcefilename); /* crash quietly */
-		// graph_epsilon_prune_rdp_tree(rdp_tree_root, sizeof(rdp_tree_edge_data));
-		// }
-		// }
-		//
+		if (rdp_verbose.value())
+			text_printf("\nRecursive descent parser generator V1.65 (c) Adrian Johnstone 2000\n" + RDP_STAMP + "\n\n");
+		for (rdp_pass = 1; rdp_pass <= RDP_PASSES; rdp_pass++)
+		{
+			rdp_tree_update = rdp_pass == RDP_PASSES;
+			text_echo(rdp_line_echo_all || rdp_line_echo.value() && rdp_pass == RDP_PASSES);
+
+			for (rdp_sourcefilenumber = 0; rdp_sourcefilenumber < rdp_sourcefilenames.length; rdp_sourcefilenumber++)
+			{
+				rdp_sourcefilename = rdp_sourcefilenames[rdp_sourcefilenumber];
+				if (text_open(rdp_sourcefilename) == null)
+					arg_help("unable to open source file");
+
+				text_get_char();
+				scan_();
+
+				// unit(rdp_tree_root = rdp_add_node("unit", rdp_tree)); /* call parser at top level */
+				// if (text_total_errors() != 0)
+				// text_message(TEXT_FATAL, "error%s detected in source file 'pÿ'\n", text_total_errors() == 1 ? "" :
+				// "s",
+				// rdp_sourcefilename); /* crash quietly */
+				// graph_epsilon_prune_rdp_tree(rdp_tree_root, sizeof(rdp_tree_edge_data));
+			}
+		}
+
 		// rdp_sourcefilename = rdp_sourcefilenames[0]; /* Reset filename to first file in the list */
 		//
 		// graph_set_root(rdp_tree, rdp_tree_root);
@@ -305,8 +314,8 @@ public class RDP
 		// {
 		// symbol_print_all_table_statistics(11);
 		// symbol_print_all_table();
-		//
 		// }
+
 		// text_print_total_errors();
 		if (rdp_verbose.value() || true)
 		{

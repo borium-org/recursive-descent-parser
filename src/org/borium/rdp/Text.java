@@ -1,5 +1,7 @@
 package org.borium.rdp;
 
+import static org.borium.rdp.CRT.*;
+import static org.borium.rdp.Scan.*;
 import static org.borium.rdp.Text.TextMessageType.*;
 
 import java.io.*;
@@ -12,6 +14,45 @@ public class Text
 	{
 		TEXT_INFO, TEXT_WARNING, TEXT_ERROR, TEXT_FATAL, TEXT_INFO_ECHO, TEXT_WARNING_ECHO, TEXT_ERROR_ECHO,
 		TEXT_FATAL_ECHO
+	}
+
+	private static class SourceList
+	{
+		/** copy of filename */
+		String name;
+
+		/** copy of total errors for this file */
+		int errors;
+
+		/** copy of current file handle */
+		InputStream file;
+
+		/** copy of first character of current source line */
+		int first_char;
+
+		/** copy of last character of current source line */
+		int last_char;
+
+		/** copy of current line in this file */
+		int linenumber;
+
+		/** copy of current text character */
+		int text_char;
+
+		/** copy of pointer to current source character */
+		int text_current;
+
+		/** copy of pointer to the last thing read by the scanner */
+		ScanData text_scan_data = new ScanData();
+
+		/** copy of first character of this symbol */
+		int symbol_first_char;
+
+		/** copy of total warnings for this file */
+		int warnings;
+
+		/** previous file descriptor */
+		SourceList previous;
 	}
 
 	/** Maximum number of error markers per line */
@@ -45,6 +86,10 @@ public class Text
 	/** current line in this file */
 	private static int linenumber = 0;
 
+	/** cumulative line_number */
+	@SuppressWarnings("unused")
+	private static int sequence_number = 0;
+
 	/** TEXT_MESSAGES; */
 	private static PrintStream messages = System.out;
 
@@ -61,7 +106,6 @@ public class Text
 	private static int first_char;
 
 	/** last character of current source line */
-	@SuppressWarnings("unused")
 	private static int last_char;
 
 	/** pointer to current source character */
@@ -77,10 +121,26 @@ public class Text
 	private static int maxtext;
 
 	/** tab expansion width */
-	@SuppressWarnings("unused")
 	private static int tabwidth;
 
 	static ScanData text_scan_data; // pointer to the last thing read by the scanner
+
+	/** enable line echoing */
+	private static boolean echo;
+
+	/** current file handle */
+	private static InputStream file;
+
+	/** head of file descriptor list */
+	private static SourceList source_descriptor_list;
+
+	/** first character in this symbol */
+	private static int symbol_first_char;
+
+	public static int text_column_number()
+	{
+		return first_char - text_current;
+	}
 
 	public static String text_default_filetype(String fname, String ftype)
 	{
@@ -94,6 +154,11 @@ public class Text
 			fullname += "." + ftype;
 		}
 		return fullname;
+	}
+
+	public static void text_echo(boolean i)
+	{
+		echo = i;
 	}
 
 	/** add a new filetype. If ftype is NULL, return just filename */
@@ -119,6 +184,61 @@ public class Text
 			fullname = fname.substring(0, length) + "." + ftype;
 		}
 		return fullname;
+	}
+
+	/** advance text_current, reading another line if necessary */
+	public static void text_get_char()
+	{
+		if (text_current <= last_char)
+		{
+			if (file != null)
+			{
+				if (feof(file))
+				{
+					text_close();
+					// pre-increment ready for pre-decrement!
+					text_current++;
+				}
+			}
+			if (file == null)
+			{
+				text_char = EOF;
+				return;
+			}
+			while (text_current <= last_char)
+			{
+				if ((echo || echo_num >= 0) && linenumber > 0)
+				{
+					text_echo_line();
+				}
+				sequence_number++;
+				linenumber++;
+				// initialise pointers to empty line
+				last_char = text_current = first_char;
+				do
+				{
+					text_char = getc(file);
+					text_bot[--last_char] = (char) text_char;
+					if (text_char == EOF)
+					{
+						text_bot[last_char] = ' ';
+					}
+					else if (text_char == '\t' && tabwidth != 0)
+					{
+						// expand tabs to next tabstop
+						text_bot[last_char] = ' '; // make tab a space
+						while ((text_current - last_char) % tabwidth != 0)
+						{
+							text_bot[--last_char] = ' ';
+						}
+					}
+				}
+				// kludge to ensure delayed echoing of lines
+				while (text_char != '\n' && text_char != EOF);
+				text_bot[--last_char] = ' ';
+			}
+		}
+		text_char = text_bot[--text_current];
 	}
 
 	public static String text_get_string(int start)
@@ -166,6 +286,11 @@ public class Text
 		}
 		text_insert_char((char) 0);
 		return start;
+	}
+
+	public static int text_line_number()
+	{
+		return linenumber;
 	}
 
 	public static int text_message(TextMessageType type, String message)
@@ -236,6 +361,55 @@ public class Text
 		return message.length() + 1;
 	}
 
+	public static InputStream text_open(String s)
+	{
+		InputStream handle = null;
+		try
+		{
+			handle = s.equals("-") ? System.in : new FileInputStream(s);
+		}
+		catch (FileNotFoundException e)
+		{
+			handle = null;
+		}
+		InputStream old = file;
+		if (handle != null) // we found a file
+		{
+			if (old != null) // save current file context
+			{
+				SourceList temp = new SourceList();
+				// load descriptor block
+				temp.errors = errors;
+				temp.file = file;
+				temp.first_char = first_char;
+				temp.last_char = last_char;
+				temp.linenumber = linenumber;
+				temp.name = name;
+				temp.text_char = text_char;
+				temp.text_current = text_current;
+				memcpy(temp.text_scan_data, text_scan_data);
+				temp.symbol_first_char = symbol_first_char;
+				temp.warnings = warnings;
+				// link descriptor block into head of list
+				temp.previous = source_descriptor_list;
+				source_descriptor_list = temp;
+			}
+			// re-initialise file context
+			errors = 0;
+			file = handle;
+			linenumber = 0;
+			name = s;
+			warnings = 0;
+			if (echo)
+			{
+				text_message(TEXT_INFO, "\n");
+			}
+			// make new buffer region below current line
+			text_current = last_char = first_char = last_char - 1;
+		}
+		return handle;
+	}
+
 	public static int text_printf(String str)
 	{
 		if (str != null)
@@ -250,6 +424,74 @@ public class Text
 			}
 		}
 		return str == null ? 0 : str.length();
+	}
+
+	public static int text_sequence_number()
+	{
+		return sequence_number;
+	}
+
+	private static void text_close()
+	{
+		if (file == null)
+			return;
+
+		linenumber = 0;
+		fclose(file);
+		file = null;
+		// unload next file if there is one
+		if (source_descriptor_list != null)
+		{
+			SourceList temp = source_descriptor_list;
+			source_descriptor_list = source_descriptor_list.previous;
+			errors = temp.errors;
+			file = temp.file;
+			first_char = temp.first_char;
+			last_char = temp.last_char;
+			linenumber = temp.linenumber;
+			name = temp.name;
+			text_char = temp.text_char;
+			text_current = temp.text_current;
+			memcpy(text_scan_data, temp.text_scan_data);
+			symbol_first_char = temp.symbol_first_char;
+			warnings = temp.warnings;
+			if (echo)
+			{
+				text_message(TEXT_INFO, "\n");
+				text_echo_line();
+			}
+		}
+	}
+
+	private static void text_echo_line()
+	{
+		text_echo_line_number();
+		// current input line is stored in reverse order at top of text buffer:
+		// print backwards from last character of text buffer
+		for (int temp = first_char - 1; temp > last_char; temp--)
+		{
+			messages.print(text_bot[temp]);
+		}
+		// now print out the echo number line
+		if (echo_num >= 0)
+		{
+			int num_count = -1, char_count = 1;
+			// only the first MAX_ECHO errors have pointers
+			if (echo_num >= MAX_ECHO)
+				echo_num = MAX_ECHO - 1;
+			text_echo_line_number();
+			while (++num_count <= echo_num)
+			{
+				while (char_count++ < echo_pos[num_count] - 1)
+				{
+					messages.print('-');
+				}
+				messages.print((char) ('1' + num_count));
+			}
+			messages.println();
+		}
+		// reset echo numbering array pointer
+		echo_num = -1;
 	}
 
 	private static void text_echo_line_number()

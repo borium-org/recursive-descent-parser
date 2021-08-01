@@ -17,12 +17,9 @@ public class Arg
 		char key;
 		String description;
 		/** Booleans were in RDP 1.5 stored in an integer field, so there's the source for this mismatch. */
-		@SuppressWarnings("unused")
 		Pointer<Boolean> intvalue;
 		/** All truly integer values are unsigned, no negative integers were used in making this app. */
-		@SuppressWarnings("unused")
 		Pointer<Integer> unsignedvalue;
-		@SuppressWarnings("unused")
 		Pointer<String> str;
 		arg_data next;
 	}

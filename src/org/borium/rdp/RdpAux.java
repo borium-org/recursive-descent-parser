@@ -175,22 +175,17 @@ public class RdpAux
 		PARAM_ID, PARAM_STRING, PARAM_REAL, PARAM_INTEGER
 	}
 
-	@SuppressWarnings("unused")
 	private static final int K_EXTENDED = 0;
 	private static final int K_INTEGER = 1;
 	private static final int K_REAL = 2;
 	private static final int K_STRING = 3;
-	@SuppressWarnings("unused")
 	private static final int K_CODE = 4;
-	@SuppressWarnings("unused")
 	private static final int K_TOKEN = 5;
 	private static final int K_PRIMARY = 6;
 	private static final int K_SEQUENCE = 7;
 	private static final int K_LIST = 8;
 
-	@SuppressWarnings("unused")
 	private static final int RDP_OLD = 0;
-	@SuppressWarnings("unused")
 	private static final int RDP_NEW = 1;
 	private static final int RDP_ANY = 2;
 
