@@ -2,6 +2,7 @@ package org.borium.rdp;
 
 import static org.borium.rdp.Arg.*;
 import static org.borium.rdp.RdpAux.*;
+import static org.borium.rdp.Scan.*;
 import static org.borium.rdp.Text.*;
 import static org.borium.rdp.Text.TextMessageType.*;
 
@@ -26,6 +27,19 @@ public class RDP
 	private static Pointer<Boolean> rdp_verbose = new Pointer<>(false); // verbosity flag
 
 	private static int rdp_sourcefilenumber;
+
+	private static String[] rdp_tokens = { "IGNORE", "ID", "INTEGER", "REAL", "CHAR", "CHAR_ESC", "STRING",
+			"STRING_ESC", "COMMENT", "COMMENT_VISIBLE", "COMMENT_NEST", "COMMENT_NEST_VISIBLE", "COMMENT_LINE",
+			"COMMENT_LINE_VISIBLE", "EOF", "EOLN", "'\"'", "'#'", "'\''", "'('", "'(*'", "')'", "'*'", "'.'", "':'",
+			"'::'", "'::='", "'<'", "'>'", "'@'", "'ALT_ID'", "'ANNOTATED_EPSILON_TREE'", "'ARG_BLANK'",
+			"'ARG_BOOLEAN'", "'ARG_NUMERIC'", "'ARG_STRING'", "'CASE_INSENSITIVE'", "'CHAR'", "'CHAR_ESC'", "'COMMENT'",
+			"'COMMENT_LINE'", "'COMMENT_LINE_VISIBLE'", "'COMMENT_NEST'", "'COMMENT_NEST_VISIBLE'", "'COMMENT_VISIBLE'",
+			"'DERIVATION_TREE'", "'EPSILON_TREE'", "'GLOBAL'", "'HASH_PRIME'", "'HASH_SIZE'", "'INCLUDE'",
+			"'INTERPRETER'", "'MAX_ERRORS'", "'MAX_WARNINGS'", "'MULTIPLE_SOURCE_FILES'", "'NEW_ID'", "'NUMBER'",
+			"'OPTION'", "'OUTPUT_FILE'", "'PARSER'", "'PASSES'", "'POST_PARSE'", "'POST_PROCESS'", "'PRE_PARSE'",
+			"'PRE_PROCESS'", "'RETAIN_COMMENTS'", "'SET_SIZE'", "'SHOW_SKIPS'", "'STRING'", "'STRING_ESC'", "'SUFFIX'",
+			"'SUPPRESS_BUILT_IN_ARGUMENTS'", "'SYMBOL_TABLE'", "'TAB_WIDTH'", "'TEXT_SIZE'", "'TITLE'", "'TREE'",
+			"'USES'", "'['", "'[*'", "']'", "'^'", "'^^'", "'^^^'", "'^_'", "'{'", "'|'", "'}'" };
 
 	public static void main(String[] args)
 	{
@@ -89,8 +103,8 @@ public class RDP
 		rdp_sourcefilename = rdp_sourcefilenames[0];
 		if (rdp_sourcefilenames.length != 1)
 			text_message(TEXT_FATAL, "multiple source files not allowed\n");
-		// text_init(rdp_textsize, 50, 120, (int) rdp_tabwidth);
-		// scan_init(0, 0, 1, rdp_symbol_echo, rdp_tokens);
+		text_init(rdp_textsize.value(), 50, 120, rdp_tabwidth.value());
+		scan_init(false, false, true, rdp_symbol_echo.value(), rdp_tokens);
 		// if (rdp_lexicalise)
 		// scan_lexicalise();
 		// locals = symbol_new_table("locals", 101, 31, symbol_compare_string, symbol_hash_string, symbol_print_string);

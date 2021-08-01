@@ -4,6 +4,8 @@ import static org.borium.rdp.Text.TextMessageType.*;
 
 import java.io.*;
 
+import org.borium.rdp.Scan.*;
+
 public class Text
 {
 	public enum TextMessageType
@@ -52,11 +54,33 @@ public class Text
 	/** current error number this line */
 	private static int echo_num = -1;
 
+	/** current text character */
+	static int text_char = ' ';
+
 	/** first character of current source line */
 	private static int first_char;
 
+	/** last character of current source line */
+	@SuppressWarnings("unused")
+	private static int last_char;
+
 	/** pointer to current source character */
 	static int text_current;
+
+	/** text array for storing id's and strings */
+	static char[] text_bot = null;
+
+	/** top of text character */
+	static int text_top = 1;
+
+	/** size of text buffer */
+	private static int maxtext;
+
+	/** tab expansion width */
+	@SuppressWarnings("unused")
+	private static int tabwidth;
+
+	static ScanData text_scan_data; // pointer to the last thing read by the scanner
 
 	public static String text_default_filetype(String fname, String ftype)
 	{
@@ -70,6 +94,53 @@ public class Text
 			fullname += "." + ftype;
 		}
 		return fullname;
+	}
+
+	public static String text_get_string(int start)
+	{
+		String s = "";
+		while (text_bot[start] != 0)
+		{
+			s += text_bot[start++];
+		}
+		return s;
+	}
+
+	public static void text_init(int max_text, int max_errors, int max_warnings, int tab_width)
+	{
+		tabwidth = tab_width;
+		maxtext = max_text;
+		maxerrors = max_errors;
+		maxwarnings = max_warnings;
+
+		text_bot = new char[maxtext];
+		text_top = 1;
+		text_current = last_char = first_char = maxtext;
+	}
+
+	public static int text_insert_char(char c)
+	{
+		int start = text_top;
+		if (text_top >= last_char)
+		{
+			text_message(TEXT_FATAL, "Ran out of text space\n");
+		}
+		else
+		{
+			text_bot[text_top++] = c;
+		}
+		return start;
+	}
+
+	public static int text_insert_string(String str)
+	{
+		int start = text_top;
+		for (char ch : str.toCharArray())
+		{
+			text_insert_char(ch);
+		}
+		text_insert_char((char) 0);
+		return start;
 	}
 
 	public static int text_message(TextMessageType type, String message)
@@ -138,6 +209,22 @@ public class Text
 			System.exit(EXIT_FAILURE);
 		}
 		return message.length() + 1;
+	}
+
+	public static int text_printf(String str)
+	{
+		if (str != null)
+		{
+			for (char ch : str.toCharArray())
+			{
+				if (ch == '\n')
+				{
+					messages.print('\r');
+				}
+				messages.print("" + ch);
+			}
+		}
+		return str == null ? 0 : str.length();
 	}
 
 	private static void text_echo_line_number()
