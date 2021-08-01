@@ -96,6 +96,31 @@ public class Text
 		return fullname;
 	}
 
+	/** add a new filetype. If ftype is NULL, return just filename */
+	public static String text_force_filetype(String fname, String ftype)
+	{
+		// work backwards from end of filename looking for a dot, or a directory separator
+		int length = fname.length() - 1;
+		while (fname.charAt(length) != '.' && fname.charAt(length) != '/' && fname.charAt(length) != '\\' && length > 0)
+		{
+			length--;
+		}
+		if (fname.charAt(length) != '.')
+		{
+			length = fname.length();
+		}
+		String fullname = null;
+		if (ftype == null)
+		{
+			fullname = fname;
+		}
+		else
+		{
+			fullname = fname.substring(0, length) + "." + ftype;
+		}
+		return fullname;
+	}
+
 	public static String text_get_string(int start)
 	{
 		String s = "";

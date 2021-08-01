@@ -35,6 +35,33 @@ public class Symbol
 		return symbol;
 	}
 
+	/** lookup a symbol by id. Return null if it is not found */
+	public static Symbol symbol_lookup_key(SymbolTable table, String key, SymbolScopeData scope)
+	{
+		int hash = table.hash(table.hash_prime, key);
+		Symbol p = table.table[hash % table.hash_size];
+
+		// look for symbol with same hash and a true compare
+		while (!(p == null || table.compare(key, p) == 0 && !(p.scope != scope && scope != null)))
+		{
+			p = p.next_hash;
+		}
+
+		return p;
+	}
+
+	public static SymbolScopeData symbol_new_scope(SymbolTable table, String id)
+	{
+		SymbolScopeData p = new SymbolScopeData();
+
+		p.id = text_insert_string(id);
+		p.next_hash = table.scopes;
+		table.current = table.scopes = p;
+		if (p.next_hash != null)
+			p.next_hash.last_hash.set(p.next_hash);
+		return p;
+	}
+
 	public static SymbolTable symbol_new_table(String name, int symbol_hashsize, int symbol_hashprime,
 			CompareHashPrint compareHashPrint)
 	{
@@ -57,6 +84,7 @@ public class Symbol
 
 	/** next symbol in hash list */
 	Symbol next_hash;
+
 	/** pointer to next pointer of last_symbol in hash list */
 	Pointer<Symbol> last_hash = new Pointer<>();
 

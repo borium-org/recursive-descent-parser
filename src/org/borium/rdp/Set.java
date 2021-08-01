@@ -4,6 +4,13 @@ public class Set
 {
 	private long[] data = new long[10];
 
+	/** clear a dst and then set only those bits specified by src */
+	public void assign(int element)
+	{
+		clear();
+		set(element);
+	}
+
 	public void assignList(int... bits)
 	{
 		clear();

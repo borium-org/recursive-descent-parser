@@ -93,8 +93,7 @@ public class RDP
 	private static final String RDP_STAMP = "Generated on Sep 19 2015 11:45:00 and compiled on " + __DATE__ + " at "
 			+ __TIME__;
 
-	@SuppressWarnings("unused")
-	private static String rdp_sourcefilename; // current source file name
+	static String rdp_sourcefilename; // current source file name
 	private static String[] rdp_sourcefilenames; // array of source file names
 
 	private static Pointer<String> rdp_outputfilename = new Pointer<>("rdparser"); // output file name
@@ -177,12 +176,9 @@ public class RDP
 
 	@SuppressWarnings("unused")
 	private static SymbolTable locals = null;
-	@SuppressWarnings("unused")
-	private static SymbolTable codes = null;
-	@SuppressWarnings("unused")
-	private static SymbolTable tokens = null;
-	@SuppressWarnings("unused")
-	private static SymbolTable rdp = null;
+	static SymbolTable codes = null;
+	static SymbolTable tokens = null;
+	static SymbolTable rdp = null;
 
 	public static void main(String[] args)
 	{
@@ -256,7 +252,7 @@ public class RDP
 		rdp = symbol_new_table("rdp", 101, 31, new CompareHashPrint());
 		rdp_set_initialise();
 		rdp_load_keywords();
-		// rdp_pre_parse();
+		rdp_pre_parse();
 		// if (rdp_verbose)
 		// text_printf("\nRecursive descent parser generator V1.65 (c) Adrian Johnstone 2000\n" RDP_STAMP "\n\n");
 		// for (rdp_pass = 1; rdp_pass <= RDP_PASSES; rdp_pass++)
@@ -318,7 +314,6 @@ public class RDP
 			System.out.println("Time: " + (double) (rdp_finish_time - rdp_start_time) / 1000);
 		}
 		// return rdp_error_return;
-		// TODO Auto-generated method stub
 		throw new RuntimeException();
 	}
 
