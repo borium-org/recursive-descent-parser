@@ -41,6 +41,13 @@ public class Set
 		}
 	}
 
+	/** assign one set to another */
+	public void assignSet(Set src)
+	{
+		clear();
+		unite(src);
+	}
+
 	public void clear()
 	{
 		for (int i = 0; i < data.length; i++)
@@ -55,6 +62,21 @@ public class Set
 		int index = element / 32;
 		element &= 0x1F;
 		return (data[index] & 1 << element) != 0;
+	}
+
+	public void intersect(Set src)
+	{
+		/* only iterate over shortest set */
+		int length = length() < src.length() ? length() : src.length();
+		for (int i = 0; i < length; i++)
+		{
+			data[i] &= src.data[i];
+		}
+		/* Now clear rest of dst */
+		while (length < length())
+		{
+			data[length++] = 0;
+		}
 	}
 
 	public void print(String[] element_names, int line_length)
@@ -90,9 +112,18 @@ public class Set
 		data[index] |= 1 << element;
 	}
 
+	public void unite(Set src)
+	{
+		grow(src.length());
+		for (int i = 0; i < data.length; i++)
+		{
+			data[i] |= src.data[i];
+		}
+	}
+
 	private Integer[] array()
 	{
-		ArrayList<Integer> elements = new ArrayList<Integer>();
+		ArrayList<Integer> elements = new ArrayList<>();
 		for (int word = 0; word < data.length; word++)
 		{
 			for (int bit = 0; bit < 32; bit++)
@@ -138,5 +169,10 @@ public class Set
 			}
 			data = newData;
 		}
+	}
+
+	private int length()
+	{
+		return data.length;
 	}
 }

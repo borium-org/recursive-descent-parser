@@ -52,4 +52,9 @@ public class Graph<NodeData extends GraphNode, EdgeData extends GraphEdge>
 		}
 		this.id = id;
 	}
+
+	void setRoot(GraphNode root)
+	{
+		this.root = root;
+	}
 }

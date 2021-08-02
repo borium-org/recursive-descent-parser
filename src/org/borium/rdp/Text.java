@@ -275,6 +275,28 @@ public class Text
 		return start;
 	}
 
+	public static int text_insert_characters(String str)
+	{
+		int start = text_top;
+		for (char ch : str.toCharArray())
+		{
+			text_insert_char(ch);
+		}
+		return start;
+	}
+
+	public static int text_insert_integer(int n)
+	{
+		int start = text_top;
+		if (n > 9)
+		{
+			// recursively handle multi-digit numbers
+			text_insert_integer(n / 10);
+		}
+		text_insert_char((char) (n % 10 + '0'));
+		return start;
+	}
+
 	public static int text_insert_string(String str)
 	{
 		int start = text_top;
@@ -298,6 +320,16 @@ public class Text
 		text_insert_integer(n);
 		text_insert_char('\0');
 		return start;
+	}
+
+	public static boolean text_is_valid_C_id(String s)
+	{
+		boolean temp = true;
+		for (char ch : s.toCharArray())
+		{
+			temp = temp && (isalnum(ch) || ch == '_');
+		}
+		return temp;
 	}
 
 	public static int text_line_number()
@@ -422,6 +454,23 @@ public class Text
 		return handle;
 	}
 
+	public static void text_print_statistics()
+	{
+		long symbolcount = text_top,
+
+				linecount = -last_char + maxtext;
+
+		if (text_bot == null)
+		{
+			text_message(TEXT_INFO, "Text buffer uninitialised\n");
+		}
+		else
+		{
+			text_message(TEXT_INFO, "Text buffer size " + maxtext + " bytes with " + (maxtext - symbolcount - linecount)
+					+ " bytes free\n");
+		}
+	}
+
 	public static int text_printf(String str)
 	{
 		if (str != null)
@@ -522,27 +571,5 @@ public class Text
 		{
 			messages.print("******: ");
 		}
-	}
-
-	private static int text_insert_characters(String str)
-	{
-		int start = text_top;
-		for (char ch : str.toCharArray())
-		{
-			text_insert_char(ch);
-		}
-		return start;
-	}
-
-	private static int text_insert_integer(int n)
-	{
-		int start = text_top;
-		if (n > 9)
-		{
-			// recursively handle multi-digit numbers
-			text_insert_integer(n / 10);
-		}
-		text_insert_char((char) (n % 10 + '0'));
-		return start;
 	}
 }

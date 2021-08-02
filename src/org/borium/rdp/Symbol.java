@@ -2,7 +2,7 @@ package org.borium.rdp;
 
 import static org.borium.rdp.Text.*;
 
-public class Symbol
+public class Symbol implements Comparable<Symbol>
 {
 	private static SymbolTable symbol_tables = null;
 
@@ -98,6 +98,18 @@ public class Symbol
 	int hash;
 
 	int id;
+
+	@Override
+	public int compareTo(Symbol other)
+	{
+		return text_get_string(id).compareTo(text_get_string(other.id));
+	}
+
+	/** Return next symbol in scope chain. Return NULL if at end */
+	public Symbol nextSymbolInScope()
+	{
+		return next_scope;
+	}
 
 	public void print()
 	{

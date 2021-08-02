@@ -1,5 +1,7 @@
 package org.borium.rdp;
 
+import static org.borium.rdp.Text.*;
+
 public class SymbolTable
 {
 	/** an identifying string */
@@ -28,8 +30,37 @@ public class SymbolTable
 		return compareHashPrint.compare(key, p);
 	}
 
+	/** return current scope */
+	SymbolScopeData getScope()
+	{
+		return current;
+	}
+
 	int hash(int prime, String key)
 	{
 		return compareHashPrint.hash(prime, key);
+	}
+
+	/** insert a symbol at head of hash list */
+	Symbol insert(Symbol symbol)
+	{
+		Symbol s = symbol;
+		s.hash = hash(hash_prime, text_get_string(symbol.id));
+		int hash_index = s.hash % hash_size;
+		s.next_hash = table[hash_index];
+		table[hash_index] = s;
+		s.last_hash.set(table[hash_index]);
+		/* if this wasn't the start of a new list ... */
+		if (s.next_hash != null)
+		{
+			/* ...point old list next back at s */
+			s.next_hash.last_hash.set(s.next_hash);
+		}
+		/* now insert in scope list */
+		s.next_scope = current.next_scope;
+		current.next_scope = s;
+		/* set up pointer to scope block */
+		s.scope = current;
+		return symbol;
 	}
 }

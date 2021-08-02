@@ -130,7 +130,7 @@ public class RDP
 	private static Pointer<String> rdp_outputfilename = new Pointer<>("rdparser"); // output file name
 
 	private static Pointer<Boolean> rdp_symbol_echo = new Pointer<>(false); // symbol echo flag
-	private static Pointer<Boolean> rdp_verbose = new Pointer<>(false); // verbosity flag
+	static Pointer<Boolean> rdp_verbose = new Pointer<>(false); // verbosity flag
 
 	private static int rdp_sourcefilenumber;
 
@@ -205,8 +205,7 @@ public class RDP
 	private static final Set unit_first = new Set();
 	private static final Set unit_stop = new Set();
 
-	@SuppressWarnings("unused")
-	private static SymbolTable locals = null;
+	static SymbolTable locals = null;
 	static SymbolTable codes = null;
 	static SymbolTable tokens = null;
 	static SymbolTable rdp = null;
@@ -318,30 +317,31 @@ public class RDP
 			}
 		}
 
-		// rdp_sourcefilename = rdp_sourcefilenames[0]; /* Reset filename to first file in the list */
-		//
-		// graph_set_root(rdp_tree, rdp_tree_root);
-		// if (rdp_vcg_filename != NULL)
-		// {
-		// FILE *rdp_vcg_file;
-		//
-		// if (*rdp_vcg_filename == '\0') /* No filename supplied */
-		// rdp_vcg_filename = "rdparser";
-		// rdp_vcg_file = fopen((rdp_vcg_filename = text_default_filetype(rdp_vcg_filename, "vcg")), "w");
-		//
-		// if (rdp_vcg_file == NULL)
-		// text_message(TEXT_FATAL, "unable to open VCG file '%s' for write\n", rdp_vcg_filename);
-		//
-		// if (rdp_verbose)
-		// text_message(TEXT_INFO, "Dumping derivation tree to VCG file '%s'\n", rdp_vcg_filename);
-		//
-		// text_redirect(rdp_vcg_file);
-		// graph_vcg(rdp_tree, NULL, scan_vcg_print_node, scan_vcg_print_edge);
-		// text_redirect(stdout);
-		// fclose(rdp_vcg_file);
-		// }
-		//
-		// rdp_post_parse(rdp_outputfilename, rdp_force);
+		rdp_sourcefilename = rdp_sourcefilenames[0]; // Reset filename to first file in the list
+
+		rdp_tree.setRoot(rdp_tree_root);
+		if (rdp_vcg_filename.value() != null)
+		{
+			// FILE *rdp_vcg_file;
+			//
+			// if (*rdp_vcg_filename == '\0') /* No filename supplied */
+			// rdp_vcg_filename = "rdparser";
+			// rdp_vcg_file = fopen((rdp_vcg_filename = text_default_filetype(rdp_vcg_filename, "vcg")), "w");
+			//
+			// if (rdp_vcg_file == NULL)
+			// text_message(TEXT_FATAL, "unable to open VCG file '%s' for write\n", rdp_vcg_filename);
+			//
+			// if (rdp_verbose)
+			// text_message(TEXT_INFO, "Dumping derivation tree to VCG file '%s'\n", rdp_vcg_filename);
+			//
+			// text_redirect(rdp_vcg_file);
+			// graph_vcg(rdp_tree, NULL, scan_vcg_print_node, scan_vcg_print_edge);
+			// text_redirect(stdout);
+			// fclose(rdp_vcg_file);
+			throw new RuntimeException();
+		}
+
+		rdp_post_parse(rdp_outputfilename.value(), rdp_force.value());
 		// if (rdp_symbol_statistics)
 		// {
 		// symbol_print_all_table_statistics(11);

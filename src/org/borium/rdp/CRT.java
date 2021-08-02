@@ -76,6 +76,11 @@ public class CRT
 		return "0123456789ABCDEFabcdef".indexOf(ch) >= 0;
 	}
 
+	public static int strcmp(String str1, String str2)
+	{
+		return str1.compareTo(str2);
+	}
+
 	public static long strtol(String nptr, Pointer<String> endptr, int base)
 	{
 		if (endptr != null)
