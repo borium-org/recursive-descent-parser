@@ -53,22 +53,17 @@ public class Scan
 	static final int SCAN_P_EOLN = 15;
 	static final int SCAN_P_TOP = 16;
 
-	@SuppressWarnings("unused")
 	private static boolean scan_case_insensitive = false;
 	@SuppressWarnings("unused")
 	private static boolean scan_show_skips = false;
-	@SuppressWarnings("unused")
 	private static boolean scan_newline_visible = false;
-	@SuppressWarnings("unused")
 	private static boolean scan_symbol_echo = false;
 	@SuppressWarnings("unused")
 	private static String[] scan_token_names = null;
 	private static ScanCommentBlock scan_comment_list = null;
 	private static ScanCommentBlock scan_comment_list_end = null;
-	@SuppressWarnings("unused")
 	private static ScanCommentBlock last_comment_block;
 	private static SymbolTable scan_table;
-	@SuppressWarnings("unused")
 	private static boolean scan_lexicalise_flag = false;
 	@SuppressWarnings("unused")
 	private static int last_line_number = 0;

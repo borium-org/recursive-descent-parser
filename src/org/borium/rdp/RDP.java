@@ -1,6 +1,7 @@
 package org.borium.rdp;
 
 import static org.borium.rdp.Arg.*;
+import static org.borium.rdp.GraphBase.*;
 import static org.borium.rdp.RdpAux.*;
 import static org.borium.rdp.Scan.*;
 import static org.borium.rdp.Symbol.*;
@@ -10,8 +11,33 @@ import static org.borium.rdp.Text.TextMessageType.*;
 import java.text.*;
 import java.util.*;
 
+import org.borium.rdp.Scan.*;
+
 public class RDP
 {
+	private static class RdpTreeEdgeData extends GraphEdge
+	{
+		@SuppressWarnings("unused")
+		int rdp_edge_kind;
+
+		@SuppressWarnings("unused")
+		RdpTreeEdgeData(int kind)
+		{
+			rdp_edge_kind = kind;
+		}
+	}
+
+	private static class RdpTreeNodeData extends GraphNode
+	{
+		ScanData data = new ScanData();
+
+		@Override
+		int getId()
+		{
+			return data.id;
+		}
+	}
+
 	static final int RDP_TT_BOTTOM = 16/* SCAN_P_TOP */;
 	static final int RDP_T_34 /* " */ = 16/* SCAN_P_TOP */;
 	static final int RDP_T_35 /* # */ = 17;
@@ -205,9 +231,9 @@ public class RDP
 
 		Pointer<String> rdp_vcg_filename = new Pointer<>(null); // filename for -V option
 
-		// rdp_tree_node_data* rdp_tree = (rdp_tree_node_data*) graph_insert_graph("RDP derivation tree"); /* hook for
-		// derivation tree */
-		// rdp_tree_node_data* rdp_tree_root;
+		Graph<RdpTreeNodeData, RdpTreeEdgeData> rdp_tree = new Graph<>();
+		rdp_tree.insertGraph("RDP derivation tree");
+		RdpTreeNodeData rdp_tree_root = null;
 
 		arg_message("Recursive descent parser generator V1.65 (c) Adrian Johnstone 2000\n"
 				+ "Ported to Java by Borium\n" + RDP_STAMP + "\n\n" + "Usage: rdparser [options] source[.bnf]");
@@ -277,12 +303,14 @@ public class RDP
 				text_get_char();
 				scan_();
 
-				// unit(rdp_tree_root = rdp_add_node("unit", rdp_tree)); /* call parser at top level */
+				// call parser at top level
+				// unit(rdp_tree_root = rdp_add_node("unit", rdp_tree));
 				// if (text_total_errors() != 0)
-				// text_message(TEXT_FATAL, "error%s detected in source file 'pÿ'\n", text_total_errors() == 1 ? "" :
-				// "s",
-				// rdp_sourcefilename); /* crash quietly */
-				// graph_epsilon_prune_rdp_tree(rdp_tree_root, sizeof(rdp_tree_edge_data));
+				// {
+				// text_message(TEXT_FATAL, "error" + (text_total_errors() == 1 ? "" : "s")
+				// + " detected in source file " + rdp_sourcefilename + "\n"); // crash quietly
+				// }
+				graph_epsilon_prune_rdp_tree(rdp_tree_root);
 			}
 		}
 

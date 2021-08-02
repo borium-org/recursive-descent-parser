@@ -87,7 +87,6 @@ public class Text
 	private static int linenumber = 0;
 
 	/** cumulative line_number */
-	@SuppressWarnings("unused")
 	private static int sequence_number = 0;
 
 	/** TEXT_MESSAGES; */
