@@ -2,6 +2,7 @@ package org.borium.rdp;
 
 import static org.borium.rdp.CRT.*;
 import static org.borium.rdp.RDP.*;
+import static org.borium.rdp.Set.*;
 import static org.borium.rdp.Symbol.*;
 import static org.borium.rdp.Text.*;
 import static org.borium.rdp.Text.TextMessageType.*;
@@ -54,11 +55,9 @@ public class Scan
 	static final int SCAN_P_TOP = 16;
 
 	private static boolean scan_case_insensitive = false;
-	@SuppressWarnings("unused")
 	private static boolean scan_show_skips = false;
 	private static boolean scan_newline_visible = false;
 	private static boolean scan_symbol_echo = false;
-	@SuppressWarnings("unused")
 	private static String[] scan_token_names = null;
 	private static ScanCommentBlock scan_comment_list = null;
 	private static ScanCommentBlock scan_comment_list_end = null;
@@ -680,6 +679,53 @@ public class Scan
 		symbol_insert_symbol(scan_table, d);
 	}
 
+	public static boolean scan_test(String production, int valid, Set stop)
+	{
+		if (valid != text_scan_data.token)
+		{
+			if (stop != null)
+			{
+				printScannedToken(production);
+				text_printf(" while expecting ");
+				set_print_element(valid, scan_token_names);
+				text_printf("\n");
+				skip(stop);
+			}
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean scan_test_set(String production, Set valid, Set stop)
+	{
+		if (!valid.includes(text_scan_data.token))
+		{
+			if (stop != null)
+			{
+				printScannedToken(production);
+				text_printf(" while expecting " + (set_cardinality(valid) == 1 ? "" : "one of "));
+				valid.print(scan_token_names, 60);
+				text_printf("\n");
+				skip(stop);
+			}
+			return false;
+		}
+		return true;
+	}
+
+	private static void printScannedToken(String production)
+	{
+		if (production != null)
+		{
+			text_message(TEXT_ERROR_ECHO, "In rule \'" + production + "\', scanned ");
+		}
+		else
+		{
+			text_message(TEXT_ERROR_ECHO, "Scanned ");
+		}
+		set_print_element(text_scan_data.token, scan_token_names);
+	}
+
 	private static void scan_insert_comment_block(String pattern, int column, int sequence_number)
 	{
 		ScanCommentBlock temp = new ScanCommentBlock();
@@ -690,5 +736,17 @@ public class Scan
 		scan_comment_list_end.next = temp;
 		scan_comment_list_end = temp;
 		last_comment_block = temp;
+	}
+
+	private static void skip(Set stop)
+	{
+		while (!stop.includes(text_scan_data.token))
+		{
+			scan_();
+		}
+		if (scan_show_skips)
+		{
+			text_message(TEXT_ERROR_ECHO, "Skipping to...\n");
+		}
 	}
 }

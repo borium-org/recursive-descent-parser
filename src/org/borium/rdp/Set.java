@@ -1,7 +1,28 @@
 package org.borium.rdp;
 
+import static org.borium.rdp.Text.*;
+
+import java.util.*;
+
 public class Set
 {
+	public static int set_cardinality(Set src)
+	{
+		return src == null ? 0 : src.cardinality();
+	}
+
+	public static int set_print_element(int element, String[] element_names)
+	{
+		if (element_names == null)
+		{
+			return text_printf(Integer.toString(element));
+		}
+		else
+		{
+			return text_printf(element_names[element]);
+		}
+	}
+
 	private long[] data = new long[10];
 
 	/** clear a dst and then set only those bits specified by src */
@@ -28,12 +49,77 @@ public class Set
 		}
 	}
 
+	public boolean includes(int element)
+	{
+		grow(element);
+		int index = element / 32;
+		element &= 0x1F;
+		return (data[index] & 1 << element) != 0;
+	}
+
+	public void print(String[] element_names, int line_length)
+	{
+		int column = 0;
+		boolean not_first = false;
+		Integer[] elements = array();
+		for (int element : elements)
+		{
+			if (not_first)
+			{
+				column += text_printf(", ");
+			}
+			else
+			{
+				not_first = true;
+			}
+
+			if (line_length != 0 && column >= line_length)
+			{
+				text_printf("\n");
+				column = 0;
+			}
+			column += set_print_element(element, element_names);
+		}
+	}
+
 	public void set(int element)
 	{
 		grow(element);
 		int index = element / 32;
 		element &= 0x1F;
 		data[index] |= 1 << element;
+	}
+
+	private Integer[] array()
+	{
+		ArrayList<Integer> elements = new ArrayList<Integer>();
+		for (int word = 0; word < data.length; word++)
+		{
+			for (int bit = 0; bit < 32; bit++)
+			{
+				if ((data[word] & 1 << bit) != 0)
+				{
+					elements.add(word * 32 + bit);
+				}
+			}
+		}
+		return elements.toArray(new Integer[0]);
+	}
+
+	private int cardinality()
+	{
+		int[] bitCounts = new int[] { 0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4 };
+
+		int cardinality = 0;
+		for (long bits : data)
+		{
+			for (int i = 0; i < 8; i++)
+			{
+				cardinality += bitCounts[(int) (bits & 0xF)];
+				bits >>= 4;
+			}
+		}
+		return cardinality;
 	}
 
 	private void grow(int bits)

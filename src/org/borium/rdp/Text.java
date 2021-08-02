@@ -61,7 +61,6 @@ public class Text
 	private static final int EXIT_FAILURE = 1;
 
 	/** total number of errors this run */
-	@SuppressWarnings("unused")
 	private static int totalerrors = 0;
 
 	/** total number of warnings this run */
@@ -287,6 +286,20 @@ public class Text
 		return start;
 	}
 
+	/** put an id_number into text buffer */
+	public static int text_insert_substring(String prefix, String str, int n)
+	{
+		int start = text_top;
+
+		text_insert_characters(prefix);
+		text_insert_char('_');
+		text_insert_characters(str);
+		text_insert_char('_');
+		text_insert_integer(n);
+		text_insert_char('\0');
+		return start;
+	}
+
 	public static int text_line_number()
 	{
 		return linenumber;
@@ -430,6 +443,11 @@ public class Text
 		return sequence_number;
 	}
 
+	public static int text_total_errors()
+	{
+		return totalerrors;
+	}
+
 	private static void text_close()
 	{
 		if (file == null)
@@ -504,5 +522,27 @@ public class Text
 		{
 			messages.print("******: ");
 		}
+	}
+
+	private static int text_insert_characters(String str)
+	{
+		int start = text_top;
+		for (char ch : str.toCharArray())
+		{
+			text_insert_char(ch);
+		}
+		return start;
+	}
+
+	private static int text_insert_integer(int n)
+	{
+		int start = text_top;
+		if (n > 9)
+		{
+			// recursively handle multi-digit numbers
+			text_insert_integer(n / 10);
+		}
+		text_insert_char((char) (n % 10 + '0'));
+		return start;
 	}
 }

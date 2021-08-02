@@ -18,6 +18,24 @@ public class Graph<NodeData extends GraphNode, EdgeData extends GraphEdge>
 	String id;
 	int atom_number;
 
+	public void insertNode(GraphNode node)
+	{
+		node.atom_number = graph_next_node_count++;
+		node.next_out_edge = null;
+		/* Now insert after node_or_graph */
+		/* look at rest of list */
+		node.next_node = next_node;
+		/* point previous at this node */
+		next_node = node;
+		/* point backlink at base pointer */
+		node.previous_node = null;
+		/* point next node back at us */
+		if (node.next_node != null)
+		{
+			node.next_node.previous_node = node;
+		}
+	}
+
 	void insertGraph(String id)
 	{
 		atom_number = graph_next_graph_count++;

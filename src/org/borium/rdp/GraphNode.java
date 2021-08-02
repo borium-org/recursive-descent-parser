@@ -30,4 +30,22 @@ public abstract class GraphNode extends GraphBase
 	}
 
 	abstract int getId();
+
+	void insertNode(GraphNode node)
+	{
+		node.atom_number = graph_next_node_count++;
+		node.next_out_edge = null;
+		/* Now insert after node_or_graph */
+		/* look at rest of list */
+		node.next_node = next_node;
+		/* point previous at this node */
+		next_node = node;
+		/* point backlink at base pointer */
+		node.previous_node = this;
+		/* point next node back at us */
+		if (node.next_node != null)
+		{
+			node.next_node.previous_node = node;
+		}
+	}
 }

@@ -32,4 +32,46 @@ public class GraphEdge extends GraphBase
 			previous_in_edge.next_in_edge = next_in_edge;
 		}
 	}
+
+	GraphEdge insertEdgeAfterFinal(GraphNode destination_node, GraphNode source_node)
+	{
+		GraphNode source_node_base = source_node;
+		GraphNode destination_node_base = destination_node;
+		GraphBase temp_edge;
+
+		atom_number = graph_next_edge_count++;
+
+		/* source and out-edge processing */
+		for (temp_edge = source_node; temp_edge.next_out_edge != null; temp_edge = temp_edge.next_out_edge)
+		{
+		}
+
+		next_out_edge = temp_edge.next_out_edge; /* look at rest of list */
+		temp_edge.next_out_edge = this; /* point previous at this node */
+		/* point backlink at source_base pointer */
+		previous_out_edge = temp_edge;
+
+		if (next_out_edge != null)
+		{
+			/* point next node back at us */
+			next_out_edge.previous_out_edge = this;
+		}
+		source = source_node_base;
+		/* destination and in-edge processing */
+		for (temp_edge = destination_node; temp_edge.next_out_edge != null; temp_edge = temp_edge.next_out_edge)
+		{
+		}
+		next_in_edge = temp_edge.next_in_edge; /* look at rest of list */
+		/* point previous at this node */
+		destination_node_base.next_in_edge = this;
+		/* point backlink at destination_base pointer */
+		previous_in_edge = temp_edge;
+		if (next_in_edge != null)
+		{
+			/* point next node back at us */
+			next_in_edge.previous_in_edge = this;
+		}
+		destination = destination_node_base;
+		return this;
+	}
 }

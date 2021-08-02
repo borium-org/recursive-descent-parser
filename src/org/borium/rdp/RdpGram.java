@@ -1,6 +1,7 @@
 package org.borium.rdp;
 
 import static org.borium.rdp.CRT.*;
+import static org.borium.rdp.RdpAux.*;
 import static org.borium.rdp.Text.*;
 import static org.borium.rdp.Text.TextMessageType.*;
 
@@ -24,5 +25,13 @@ public class RdpGram
 
 		if (bad)
 			text_message(TEXT_ERROR_ECHO, "tokens must not contain spaces or control characters\n");
+	}
+
+	static void rdp_check_eoln(String id)
+	{
+		if (id.equals("EOLN"))
+		{
+			rdp_dir_newline_visible = 1; /* Grammar contains an explicit EOLN */
+		}
 	}
 }
