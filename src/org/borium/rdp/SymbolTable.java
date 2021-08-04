@@ -25,6 +25,19 @@ public class SymbolTable
 	/** pointer to last declared symbol table */
 	SymbolTable next;
 
+	public SymbolScopeData newScope(String id)
+	{
+		SymbolScopeData p = new SymbolScopeData();
+		p.id = text_insert_string(id);
+		p.next_hash = scopes;
+		current = scopes = p;
+		if (p.next_hash != null)
+		{
+			p.next_hash.last_hash.set(p.next_hash);
+		}
+		return p;
+	}
+
 	int compare(String key, Symbol p)
 	{
 		return compareHashPrint.compare(key, p);

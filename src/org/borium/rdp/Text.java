@@ -159,6 +159,36 @@ public class Text
 		echo = i;
 	}
 
+	public static String text_extract_filename(String fname)
+	{
+		String name = fname;
+		// search backwards for '.' and terminate the string there
+		int temp = name.length();
+		while (--temp > 0)
+		{
+			if (name.charAt(temp) == '.')
+			{
+				name = name.substring(0, temp);
+				break;
+			}
+		}
+		// we didn't find a dot, so start again at the end
+		if (temp != name.length())
+		{
+			temp = fname.length();
+		}
+		// search backwards for '/' or '\' and start the string there
+		while (--temp > 0)
+		{
+			if (name.charAt(temp) == '/' || name.charAt(temp) == '\\')
+			{
+				name = name.substring(temp + 1);
+				break;
+			}
+		}
+		return name;
+	}
+
 	/** add a new filetype. If ftype is NULL, return just filename */
 	public static String text_force_filetype(String fname, String ftype)
 	{
@@ -471,6 +501,14 @@ public class Text
 		}
 	}
 
+	public static void text_print_time()
+	{
+		// String __DATE__ = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+		// String __TIME__ = new SimpleDateFormat("HH:mm:ss").format(new Date());
+		// text_printf(__DATE__ + " " + __TIME__);
+		text_printf("Sep 19 2015 11:45:00");
+	}
+
 	public static int text_printf(String str)
 	{
 		if (str != null)
@@ -487,6 +525,11 @@ public class Text
 		return str == null ? 0 : str.length();
 	}
 
+	public static void text_redirect(PrintStream file)
+	{
+		messages = file;
+	}
+
 	public static int text_sequence_number()
 	{
 		return sequence_number;
@@ -495,6 +538,11 @@ public class Text
 	public static int text_total_errors()
 	{
 		return totalerrors;
+	}
+
+	public static String text_uppercase_string(String str)
+	{
+		return str.toUpperCase();
 	}
 
 	private static void text_close()

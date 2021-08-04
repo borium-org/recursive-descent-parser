@@ -4,6 +4,17 @@ import java.util.*;
 
 public class SymbolScopeData extends Symbol
 {
+	public void unlinkScope()
+	{
+		Symbol s = this;
+		s = s.next_scope;
+		while (s != null)
+		{
+			s.unlinkSymbol();
+			s = s.next_scope;
+		}
+	}
+
 	/**
 	 * Sort a scope region. Don't change positions in the hash table: just move pointers in the scope chain
 	 */
@@ -20,7 +31,7 @@ public class SymbolScopeData extends Symbol
 		{
 			return;
 		}
-		ArrayList<Symbol> list = new ArrayList<Symbol>();
+		ArrayList<Symbol> list = new ArrayList<>();
 		Symbol temp_scope = s.next_scope;
 		while (temp_scope != null)
 		{

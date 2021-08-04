@@ -115,4 +115,15 @@ public class Symbol implements Comparable<Symbol>
 	{
 		text_printf(id == 0 ? "Null symbol" : text_get_string(id));
 	}
+
+	protected void unlinkSymbol()
+	{
+		Symbol s = this;
+
+		s.last_hash.set(s.next_hash); /* point previous pointer to next symbol */
+		if (s.next_hash != null)
+		{
+			s.next_hash.last_hash.set(s.last_hash.value());
+		}
+	}
 }

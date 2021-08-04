@@ -14,7 +14,7 @@ public class RdpPrint
 	static String[] rdp_enum_string;
 	static String[] rdp_token_string;
 
-	static void rdp_make_token_string(SymbolScopeData base)
+	public static void rdp_make_token_string(SymbolScopeData base)
 	{
 		RdpData p = (RdpData) base.nextSymbolInScope();
 
@@ -173,5 +173,41 @@ public class RdpPrint
 		}
 		rdp_token_string = tokens.toArray(new String[0]);
 		rdp_enum_string = enums.toArray(new String[0]);
+	}
+
+	protected int rdp_indentation;
+
+	protected void indent()
+	{
+		for (int temp = 0; temp < rdp_indentation; temp++)
+		{
+			text_printf("\t");
+		}
+	}
+
+	protected void rdp_print_parser_production_name(RdpData n)
+	{
+		switch (n.kind)
+		{
+		case K_CODE:
+			text_printf("[*" + text_get_string(n.id) + "*]");
+			break;
+		case K_EXTENDED:
+		case K_TOKEN:
+			text_printf(text_get_string(n.token_enum));
+			break;
+		case K_INTEGER:
+		case K_REAL:
+		case K_STRING:
+			text_printf("SCAN_P_" + text_get_string(n.id));
+			break;
+		default:
+			text_printf(text_get_string(n.id));
+			if (text_get_string(n.id).length() == 0)
+			{
+				System.err.println("Empty string");
+			}
+			break;
+		}
 	}
 }

@@ -129,6 +129,9 @@ public class RDP
 
 	private static Pointer<String> rdp_outputfilename = new Pointer<>("rdparser"); // output file name
 
+	// set if we want original C parser
+	static final Pointer<String> rdp_c_path = new Pointer<>();
+
 	private static Pointer<Boolean> rdp_symbol_echo = new Pointer<>(false); // symbol echo flag
 	static Pointer<Boolean> rdp_verbose = new Pointer<>(false); // verbosity flag
 
@@ -258,6 +261,7 @@ public class RDP
 		arg_boolean('F', "Force creation of output files", rdp_force);
 		arg_boolean('p', "Make parser only (omit semantic actions from generated code)", rdp_parser_only);
 		arg_boolean('R', "Add rule entry and exit messages", rdp_trace);
+		arg_string('C', "C parser path", rdp_c_path);
 
 		rdp_sourcefilenames = arg_process(args);
 

@@ -18,6 +18,15 @@ public class RdpAux
 	{
 	}
 
+	static class RdpArgList
+	{
+		ArgKind kind;
+		String var;
+		String key;
+		String desc;
+		RdpArgList next;
+	}
+
 	static class RdpData extends Symbol
 	{
 		int token;
@@ -244,20 +253,6 @@ public class RdpAux
 		String print;
 		String data_fields;
 		RdpTableList next;
-	}
-
-	private static class RdpArgList
-	{
-		@SuppressWarnings("unused")
-		ArgKind kind;
-		@SuppressWarnings("unused")
-		String var;
-		@SuppressWarnings("unused")
-		String key;
-		@SuppressWarnings("unused")
-		String desc;
-		@SuppressWarnings("unused")
-		RdpArgList next;
 	}
 
 	static final int K_EXTENDED = 0;
@@ -516,14 +511,14 @@ public class RdpAux
 		rdp_base.sort();
 		// find the non-LL(1)-isms
 		rdp_bad_grammar(rdp_base);
-		// if (rdp_expanded.value())
-		// {
-		// if (rdp_c_path.value() != null)
-		// {
-		// RdpPrintC print = new RdpPrintC();
-		// print.rdp_dump_extended(rdp_base);
-		// }
-		// }
+		if (rdp_expanded.value())
+		{
+			if (rdp_c_path.value() != null)
+			{
+				RdpPrintC print = new RdpPrintC();
+				print.rdp_dump_extended(rdp_base);
+			}
+		}
 		if (text_total_errors() > 0)
 		{
 			if (force)
@@ -531,12 +526,12 @@ public class RdpAux
 			else
 				text_message(TEXT_FATAL, "Run aborted without creating output files - rerun with -F to override\n");
 		}
-		// if (rdp_c_path.value() != null)
-		// {
-		// RdpPrintC print = new RdpPrintC();
-		// print.printHeader(text_force_filetype(outputfilename, "h"));
-		// print.printParser(text_force_filetype(outputfilename, "c"), rdp_base);
-		// }
+		if (rdp_c_path.value() != null)
+		{
+			RdpPrintC print = new RdpPrintC();
+			print.printHeader(text_force_filetype(outputfilename, "h"));
+			print.printParser(text_force_filetype(outputfilename, "c"), rdp_base);
+		}
 		// if (rdp_cpp_path.value() != null)
 		// {
 		// // TODO C++
