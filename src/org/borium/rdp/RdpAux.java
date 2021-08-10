@@ -276,19 +276,19 @@ public class RdpAux
 	static final int PROMOTE_ABOVE = 4;
 
 	/** force output files flag */
-	public static Pointer<Boolean> rdp_force = new Pointer<>(false);
+	public static final Pointer<Boolean> rdp_force = new Pointer<>(false);
 
 	/** flag to force writing of production name into error messages */
-	public static Pointer<Boolean> rdp_error_production_name = new Pointer<>(false);
+	public static final Pointer<Boolean> rdp_error_production_name = new Pointer<>(false);
 
 	/** flag to generate expanded bnf listing */
-	public static Pointer<Boolean> rdp_expanded = new Pointer<>(false);
+	public static final Pointer<Boolean> rdp_expanded = new Pointer<>(false);
 
 	/** omit semantic actions flag */
-	public static Pointer<Boolean> rdp_parser_only = new Pointer<>(false);
+	public static final Pointer<Boolean> rdp_parser_only = new Pointer<>(false);
 
 	/** add trace messages flag */
-	public static Pointer<Boolean> rdp_trace = new Pointer<>(false);
+	public static final Pointer<Boolean> rdp_trace = new Pointer<>(false);
 
 	/** symbol table for the parser */
 	@SuppressWarnings("unused")
@@ -491,7 +491,7 @@ public class RdpAux
 	{
 		LocalsData local = new LocalsData();
 		local.id = text_insert_string("result");
-		locals.insert(local);
+		symbol_insert_symbol(locals, local);
 		// sort productions into alphabetical order
 		SymbolScopeData tokens_base = tokens.getScope();
 		tokens_base.sort();

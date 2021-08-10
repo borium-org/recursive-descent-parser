@@ -9,6 +9,7 @@ import java.util.*;
 
 import org.borium.rdp.RdpAux.*;
 
+@SuppressWarnings("unused")
 public class RdpPrint
 {
 	static String[] rdp_enum_string;
@@ -181,7 +182,7 @@ public class RdpPrint
 	{
 		for (int temp = 0; temp < rdp_indentation; temp++)
 		{
-			text_printf("\t");
+			text_printf("  ");
 		}
 	}
 

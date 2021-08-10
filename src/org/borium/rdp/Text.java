@@ -8,6 +8,7 @@ import java.io.*;
 
 import org.borium.rdp.Scan.*;
 
+@SuppressWarnings("unused")
 public class Text
 {
 	public enum TextMessageType
@@ -64,7 +65,6 @@ public class Text
 	private static int totalerrors = 0;
 
 	/** total number of warnings this run */
-	@SuppressWarnings("unused")
 	private static int totalwarnings = 0;
 
 	/** total errors for this file */

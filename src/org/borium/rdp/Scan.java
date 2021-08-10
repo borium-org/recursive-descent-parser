@@ -73,7 +73,7 @@ public class Scan
 	public static void memcpy(ScanData to, ScanData from)
 	{
 		to.next_hash = from.next_hash;
-		to.last_hash = from.last_hash;
+		to.last_hash.set(from.last_hash.value());
 		to.next_scope = from.next_scope;
 		to.scope = from.scope;
 		to.hash = from.hash;
@@ -92,7 +92,7 @@ public class Scan
 	public static void memset(ScanData to)
 	{
 		to.next_hash = null;
-		to.last_hash = null;
+		to.last_hash.set(null);
 		to.next_scope = null;
 		to.scope = null;
 		to.hash = 0;

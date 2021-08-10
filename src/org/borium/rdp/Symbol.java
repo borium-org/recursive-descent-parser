@@ -86,7 +86,7 @@ public class Symbol implements Comparable<Symbol>
 	Symbol next_hash;
 
 	/** pointer to next pointer of last_symbol in hash list */
-	Pointer<Symbol> last_hash = new Pointer<>();
+	final Pointer<Symbol> last_hash = new Pointer<>();
 
 	/** next symbol in scope list */
 	Symbol next_scope;

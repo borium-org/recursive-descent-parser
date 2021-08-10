@@ -12,6 +12,7 @@ import static org.borium.rdp.Text.TextMessageType.*;
 
 import org.borium.rdp.RdpAux.*;
 
+@SuppressWarnings("unused")
 public class RdpGram
 {
 	private static final String[] RDP_RESERVED_WORDS = { "auto", "break", "case", "char", "const", "continue",

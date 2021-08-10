@@ -17,11 +17,11 @@ import java.util.*;
 import org.borium.rdp.RdpAux.*;
 import org.borium.rdp.Scan.*;
 
+@SuppressWarnings("unused")
 public class RDP
 {
 	private static class RdpTreeEdgeData extends GraphEdge
 	{
-		@SuppressWarnings("unused")
 		int rdp_edge_kind;
 
 		RdpTreeEdgeData(int kind)
@@ -127,13 +127,13 @@ public class RDP
 	static String rdp_sourcefilename; // current source file name
 	private static String[] rdp_sourcefilenames; // array of source file names
 
-	private static Pointer<String> rdp_outputfilename = new Pointer<>("rdparser"); // output file name
+	private static final Pointer<String> rdp_outputfilename = new Pointer<>("rdparser"); // output file name
 
 	// set if we want original C parser
 	static final Pointer<String> rdp_c_path = new Pointer<>();
 
-	private static Pointer<Boolean> rdp_symbol_echo = new Pointer<>(false); // symbol echo flag
-	static Pointer<Boolean> rdp_verbose = new Pointer<>(false); // verbosity flag
+	private static final Pointer<Boolean> rdp_symbol_echo = new Pointer<>(false); // symbol echo flag
+	static final Pointer<Boolean> rdp_verbose = new Pointer<>(false); // verbosity flag
 
 	private static int rdp_sourcefilenumber;
 
@@ -224,18 +224,18 @@ public class RDP
 	{
 		long rdp_start_time = System.currentTimeMillis();
 
-		Pointer<Boolean> rdp_symbol_statistics = new Pointer<>(false); // show symbol_ table statistics flag
+		final Pointer<Boolean> rdp_symbol_statistics = new Pointer<>(false); // show symbol_ table statistics flag
 		boolean rdp_line_echo_all = false; // make a listing on all passes flag
-		Pointer<Boolean> rdp_filter = new Pointer<>(false); // filter flag
-		Pointer<Boolean> rdp_line_echo = new Pointer<>(false); // make listing flag
+		final Pointer<Boolean> rdp_filter = new Pointer<>(false); // filter flag
+		final Pointer<Boolean> rdp_line_echo = new Pointer<>(false); // make listing flag
 
-		Pointer<Boolean> rdp_lexicalise = new Pointer<>(false); // print lexicalised output flag
+		final Pointer<Boolean> rdp_lexicalise = new Pointer<>(false); // print lexicalised output flag
 
-		Pointer<Integer> rdp_textsize = new Pointer<>(600000); // size of scanner text array
+		final Pointer<Integer> rdp_textsize = new Pointer<>(600000); // size of scanner text array
 
-		Pointer<Integer> rdp_tabwidth = new Pointer<>(8); // tab expansion width
+		final Pointer<Integer> rdp_tabwidth = new Pointer<>(8); // tab expansion width
 
-		Pointer<String> rdp_vcg_filename = new Pointer<>(null); // filename for -V option
+		final Pointer<String> rdp_vcg_filename = new Pointer<>(null); // filename for -V option
 
 		Graph<RdpTreeNodeData, RdpTreeEdgeData> rdp_tree = new Graph<>();
 		rdp_tree.insertGraph("RDP derivation tree");

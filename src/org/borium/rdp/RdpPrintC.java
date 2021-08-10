@@ -12,6 +12,7 @@ import java.io.*;
 
 import org.borium.rdp.RdpAux.*;
 
+@SuppressWarnings("unused")
 public class RdpPrintC extends RdpPrint
 {
 	public void printHeader(String headerfilename)
@@ -438,7 +439,7 @@ public class RdpPrintC extends RdpPrint
 
 		text_printf(";            /* call parser at top level */\n" + "      if (text_total_errors() != 0)\n"
 				+ "        text_message(TEXT_FATAL, \"error%s detected in source file '" + "rdparser"
-				+ "'\\n\", text_total_errors() == 1 ? \"\" : \"s\", rdp_sourcefilename);   /* crash quietly */ \n");
+				+ "'\\n\", text_total_errors() == 1 ? \"\" : \"s\", rdp_sourcefilename);   /* crash quietly */\n");
 
 		if (rdp_dir_tree != 0 && rdp_dir_epsilon_tree == 0)
 		{
@@ -631,7 +632,7 @@ public class RdpPrintC extends RdpPrint
 					LocalsData local = new LocalsData();
 
 					local.id = text_insert_string(list.return_name);
-					locals.insert(local);
+					symbol_insert_symbol(locals, local);
 
 					text_printf("  " + list.production.return_type);
 					for (int temp_int = 0; temp_int < list.production.return_type_stars; temp_int++)
@@ -932,7 +933,7 @@ public class RdpPrintC extends RdpPrint
 			if (temp.kind == K_PRIMARY && temp.call_count > 0 && temp.code_only == 0)
 			{
 				boolean is_void = temp.return_type.equals("void") && temp.return_type_stars == 0;
-				SymbolScopeData local_scope = locals.newScope(text_get_string(temp.id));
+				SymbolScopeData local_scope = symbol_new_scope(locals, text_get_string(temp.id));
 
 				if (temp != rdp_start_prod)
 				{
