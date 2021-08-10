@@ -2637,7 +2637,7 @@ int main(int argc, char *argv[])
 
       unit(rdp_tree_root = rdp_add_node("unit", rdp_tree));            /* call parser at top level */
       if (text_total_errors() != 0)
-        text_message(TEXT_FATAL, "error%s detected in source file 'pÿ'\n", text_total_errors() == 1 ? "" : "s", rdp_sourcefilename);   /* crash quietly */ 
+        text_message(TEXT_FATAL, "error%s detected in source file 'rdparser'\n", text_total_errors() == 1 ? "" : "s", rdp_sourcefilename);   /* crash quietly */
       graph_epsilon_prune_rdp_tree(rdp_tree_root, sizeof(rdp_tree_edge_data));
     }
   }
