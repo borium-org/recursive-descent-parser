@@ -1,0 +1,785 @@
+Comparing files rdparser.c and RDP\RDPARSER.C
+***** rdparser.c
+  {
+                if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                scan_test(NULL, RDP_T_34 /* " */, &String_stop);
+                result = SCAN_CAST->id;
+                scan_();
+    scan_test_set(NULL, &String_stop, &String_stop);
+***** RDP\RDPARSER.C
+  {
+    if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+    scan_test(NULL, RDP_T_34 /* " */, &String_stop);
+    result = SCAN_CAST->id;
+    scan_();
+    scan_test_set(NULL, &String_stop, &String_stop);
+*****
+
+***** rdparser.c
+  {
+                if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                scan_test(NULL, RDP_T_9142 /* [* */, &code_stop);
+                result = SCAN_CAST->id;
+                scan_();
+    scan_test_set(NULL, &code_stop, &code_stop);
+***** RDP\RDPARSER.C
+  {
+    if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+    scan_test(NULL, RDP_T_9142 /* [* */, &code_stop);
+    result = SCAN_CAST->id;
+    scan_();
+    scan_test_set(NULL, &code_stop, &code_stop);
+*****
+
+***** rdparser.c
+  {
+                if (scan_test(NULL, RDP_T_INCLUDE, NULL))
+                {
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_INCLUDE, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+                        scan_();
+                        filename = String(rdp_add_child("String", rdp_tree));
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+                        scan_();
+                        if (rdp_pass == 2) { \
+ if (text_open(filename) == NULL)\
+***** RDP\RDPARSER.C
+  {
+    if (scan_test(NULL, RDP_T_INCLUDE, NULL))
+    {
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_INCLUDE, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+      scan_();
+      filename = String(rdp_add_child("String", rdp_tree));
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+      scan_();
+      if (rdp_pass == 2) { \
+ if (text_open(filename) == NULL)\
+*****
+
+***** rdparser.c
+}
+                }
+                else
+                if (scan_test(NULL, RDP_T_ARG_BOOLEAN, NULL))
+                {
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_ARG_BOOLEAN, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, SCAN_P_ID, &dir_stop);
+                        key = SCAN_CAST->id;
+                        scan_();
+                        { /* Start of rdp_dir_3 */
+                                while (1)
+                                {
+                                        scan_test_set(NULL, &rdp_dir_3_first, &dir_stop);
+                                        {
+                                                if (scan_test(NULL, SCAN_P_ID, NULL))
+                                                {
+                                                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                                                        scan_test(NULL, SCAN_P_ID, &dir_stop);
+                                                        var = SCAN_CAST->id;
+                                                        scan_();
+                                                }
+                                                else
+                                                if (scan_test(NULL, RDP_T_9142 /* [* */, NULL))
+                                                {
+                                                        var = code(rdp_add_child("code", rdp_tree));
+                                                }
+                                                else
+                                                        scan_test_set(NULL, &rdp_dir_3_first, &dir_stop)                       
+                        ;
+                                                }
+                                        break;   /* hi limit is 1! */
+                                }
+                        } /* end of rdp_dir_3 */
+                        desc = String(rdp_add_child("String", rdp_tree));
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+                        scan_();
+                        if (rdp_pass == 2) { \
+ rdp_add_arg(ARG_BOOLEAN, key, var, desc);  \
+***** RDP\RDPARSER.C
+}
+    }
+    else
+    if (scan_test(NULL, RDP_T_ARG_BOOLEAN, NULL))
+    {
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_ARG_BOOLEAN, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, SCAN_P_ID, &dir_stop);
+      key = SCAN_CAST->id;
+      scan_();
+      { /* Start of rdp_dir_3 */
+        while (1)
+        {
+          scan_test_set(NULL, &rdp_dir_3_first, &dir_stop);
+          {
+            if (scan_test(NULL, SCAN_P_ID, NULL))
+            {
+              if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+              scan_test(NULL, SCAN_P_ID, &dir_stop);
+              var = SCAN_CAST->id;
+              scan_();
+            }
+            else
+            if (scan_test(NULL, RDP_T_9142 /* [* */, NULL))
+            {
+              var = code(rdp_add_child("code", rdp_tree));
+            }
+            else
+              scan_test_set(NULL, &rdp_dir_3_first, &dir_stop)            ;
+            }
+          break;   /* hi limit is 1! */
+        }
+      } /* end of rdp_dir_3 */
+      desc = String(rdp_add_child("String", rdp_tree));
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+      scan_();
+      if (rdp_pass == 2) { \
+ rdp_add_arg(ARG_BOOLEAN, key, var, desc);  \
+*****
+
+***** rdparser.c
+}
+                }
+                else
+                if (scan_test(NULL, RDP_T_ARG_NUMERIC, NULL))
+                {
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_ARG_NUMERIC, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, SCAN_P_ID, &dir_stop);
+                        key = SCAN_CAST->id;
+                        scan_();
+                        { /* Start of rdp_dir_7 */
+                                while (1)
+                                {
+                                        scan_test_set(NULL, &rdp_dir_7_first, &dir_stop);
+                                        {
+                                                if (scan_test(NULL, SCAN_P_ID, NULL))
+                                                {
+                                                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                                                        scan_test(NULL, SCAN_P_ID, &dir_stop);
+                                                        var = SCAN_CAST->id;
+                                                        scan_();
+                                                }
+                                                else
+                                                if (scan_test(NULL, RDP_T_9142 /* [* */, NULL))
+                                                {
+                                                        var = code(rdp_add_child("code", rdp_tree));
+                                                }
+                                                else
+                                                        scan_test_set(NULL, &rdp_dir_7_first, &dir_stop)                       
+                        ;
+                                                }
+                                        break;   /* hi limit is 1! */
+                                }
+                        } /* end of rdp_dir_7 */
+                        desc = String(rdp_add_child("String", rdp_tree));
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+                        scan_();
+                        if (rdp_pass == 2) { \
+ rdp_add_arg(ARG_NUMERIC, key, var, desc);  \
+***** RDP\RDPARSER.C
+}
+    }
+    else
+    if (scan_test(NULL, RDP_T_ARG_NUMERIC, NULL))
+    {
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_ARG_NUMERIC, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, SCAN_P_ID, &dir_stop);
+      key = SCAN_CAST->id;
+      scan_();
+      { /* Start of rdp_dir_7 */
+        while (1)
+        {
+          scan_test_set(NULL, &rdp_dir_7_first, &dir_stop);
+          {
+            if (scan_test(NULL, SCAN_P_ID, NULL))
+            {
+              if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+              scan_test(NULL, SCAN_P_ID, &dir_stop);
+              var = SCAN_CAST->id;
+              scan_();
+            }
+            else
+            if (scan_test(NULL, RDP_T_9142 /* [* */, NULL))
+            {
+              var = code(rdp_add_child("code", rdp_tree));
+            }
+            else
+              scan_test_set(NULL, &rdp_dir_7_first, &dir_stop)            ;
+            }
+          break;   /* hi limit is 1! */
+        }
+      } /* end of rdp_dir_7 */
+      desc = String(rdp_add_child("String", rdp_tree));
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+      scan_();
+      if (rdp_pass == 2) { \
+ rdp_add_arg(ARG_NUMERIC, key, var, desc);  \
+*****
+
+***** rdparser.c
+}
+                }
+                else
+                if (scan_test(NULL, RDP_T_ARG_STRING, NULL))
+                {
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_ARG_STRING, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, SCAN_P_ID, &dir_stop);
+                        key = SCAN_CAST->id;
+                        scan_();
+                        { /* Start of rdp_dir_11 */
+                                while (1)
+                                {
+                                        scan_test_set(NULL, &rdp_dir_11_first, &dir_stop);
+                                        {
+                                                if (scan_test(NULL, SCAN_P_ID, NULL))
+                                                {
+                                                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                                                        scan_test(NULL, SCAN_P_ID, &dir_stop);
+                                                        var = SCAN_CAST->id;
+                                                        scan_();
+                                                }
+                                                else
+                                                if (scan_test(NULL, RDP_T_9142 /* [* */, NULL))
+                                                {
+                                                        var = code(rdp_add_child("code", rdp_tree));
+                                                }
+                                                else
+                                                        scan_test_set(NULL, &rdp_dir_11_first, &dir_stop)                      
+                        ;
+                                                }
+                                        break;   /* hi limit is 1! */
+                                }
+                        } /* end of rdp_dir_11 */
+                        desc = String(rdp_add_child("String", rdp_tree));
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+                        scan_();
+                        if (rdp_pass == 2) { \
+ rdp_add_arg(ARG_STRING,  key, var, desc);  \
+***** RDP\RDPARSER.C
+}
+    }
+    else
+    if (scan_test(NULL, RDP_T_ARG_STRING, NULL))
+    {
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_ARG_STRING, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, SCAN_P_ID, &dir_stop);
+      key = SCAN_CAST->id;
+      scan_();
+      { /* Start of rdp_dir_11 */
+        while (1)
+        {
+          scan_test_set(NULL, &rdp_dir_11_first, &dir_stop);
+          {
+            if (scan_test(NULL, SCAN_P_ID, NULL))
+            {
+              if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+              scan_test(NULL, SCAN_P_ID, &dir_stop);
+              var = SCAN_CAST->id;
+              scan_();
+            }
+            else
+            if (scan_test(NULL, RDP_T_9142 /* [* */, NULL))
+            {
+              var = code(rdp_add_child("code", rdp_tree));
+            }
+            else
+              scan_test_set(NULL, &rdp_dir_11_first, &dir_stop)            ;
+            }
+          break;   /* hi limit is 1! */
+        }
+      } /* end of rdp_dir_11 */
+      desc = String(rdp_add_child("String", rdp_tree));
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+      scan_();
+      if (rdp_pass == 2) { \
+ rdp_add_arg(ARG_STRING,  key, var, desc);  \
+*****
+
+***** rdparser.c
+}
+                }
+                else
+                if (scan_test(NULL, RDP_T_ARG_BLANK, NULL))
+                {
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_ARG_BLANK, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+                        scan_();
+                        desc = String(rdp_add_child("String", rdp_tree));
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+                        scan_();
+                        if (rdp_pass == 2) { \
+ rdp_add_arg(ARG_BLANK,   NULL, NULL, desc);  \
+***** RDP\RDPARSER.C
+}
+    }
+    else
+    if (scan_test(NULL, RDP_T_ARG_BLANK, NULL))
+    {
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_ARG_BLANK, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+      scan_();
+      desc = String(rdp_add_child("String", rdp_tree));
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+      scan_();
+      if (rdp_pass == 2) { \
+ rdp_add_arg(ARG_BLANK,   NULL, NULL, desc);  \
+*****
+
+***** rdparser.c
+}
+                }
+                else
+                if (scan_test(NULL, RDP_T_SYMBOL_TABLE, NULL))
+                {
+                         rdp_table_list *temp; 
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_SYMBOL_TABLE, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, SCAN_P_ID, &dir_stop);
+                        name = SCAN_CAST->id;
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, SCAN_P_INTEGER, &dir_stop);
+                        size = SCAN_CAST->data.i;
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, SCAN_P_INTEGER, &dir_stop);
+                        prime = SCAN_CAST->data.i;
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, SCAN_P_ID, &dir_stop);
+                        compare = SCAN_CAST->id;
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, SCAN_P_ID, &dir_stop);
+                        hash = SCAN_CAST->id;
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, SCAN_P_ID, &dir_stop);
+                        print = SCAN_CAST->id;
+                        scan_();
+                        data_fields = code(rdp_add_child("code", rdp_tree));
+                        if (rdp_pass == 2) { \
+temp = (rdp_table_list*) mem_malloc(sizeof(rdp_table_list));\
+***** RDP\RDPARSER.C
+}
+    }
+    else
+    if (scan_test(NULL, RDP_T_SYMBOL_TABLE, NULL))
+    {
+       rdp_table_list *temp; 
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_SYMBOL_TABLE, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, SCAN_P_ID, &dir_stop);
+      name = SCAN_CAST->id;
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, SCAN_P_INTEGER, &dir_stop);
+      size = SCAN_CAST->data.i;
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, SCAN_P_INTEGER, &dir_stop);
+      prime = SCAN_CAST->data.i;
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, SCAN_P_ID, &dir_stop);
+      compare = SCAN_CAST->id;
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, SCAN_P_ID, &dir_stop);
+      hash = SCAN_CAST->id;
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, SCAN_P_ID, &dir_stop);
+      print = SCAN_CAST->id;
+      scan_();
+      data_fields = code(rdp_add_child("code", rdp_tree));
+      if (rdp_pass == 2) { \
+temp = (rdp_table_list*) mem_malloc(sizeof(rdp_table_list));\
+*****
+
+***** rdparser.c
+}
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+                        scan_();
+                }
+                else
+                if (scan_test(NULL, RDP_T_USES, NULL))
+                {
+                         rdp_string_list *temp; 
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_USES, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+                        scan_();
+                        s = String(rdp_add_child("String", rdp_tree));
+                        if (rdp_pass == 2) { \
+temp = (rdp_string_list*) mem_malloc(sizeof(rdp_string_list));\
+***** RDP\RDPARSER.C
+}
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+      scan_();
+    }
+    else
+    if (scan_test(NULL, RDP_T_USES, NULL))
+    {
+       rdp_string_list *temp; 
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_USES, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+      scan_();
+      s = String(rdp_add_child("String", rdp_tree));
+      if (rdp_pass == 2) { \
+temp = (rdp_string_list*) mem_malloc(sizeof(rdp_string_list));\
+*****
+
+***** rdparser.c
+}
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+                        scan_();
+                }
+                else
+                if (scan_test(NULL, RDP_T_OUTPUT_FILE, NULL))
+                {
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_OUTPUT_FILE, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+                        scan_();
+                        s = String(rdp_add_child("String", rdp_tree));
+                         rdp_dir_output_file = s; 
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+                        scan_();
+                }
+                else
+                if (scan_test(NULL, RDP_T_PARSER, NULL))
+                {
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_PARSER, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, SCAN_P_ID, &dir_stop);
+                        name = SCAN_CAST->id;
+                        scan_();
+                        if (rdp_pass == 2) { \
+ rdp_start_prod = rdp_find(name, K_PRIMARY, RDP_OLD); rdp_start_prod->call_count++;  \
+***** RDP\RDPARSER.C
+}
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+      scan_();
+    }
+    else
+    if (scan_test(NULL, RDP_T_OUTPUT_FILE, NULL))
+    {
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_OUTPUT_FILE, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+      scan_();
+      s = String(rdp_add_child("String", rdp_tree));
+       rdp_dir_output_file = s; 
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+      scan_();
+    }
+    else
+    if (scan_test(NULL, RDP_T_PARSER, NULL))
+    {
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_PARSER, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, SCAN_P_ID, &dir_stop);
+      name = SCAN_CAST->id;
+      scan_();
+      if (rdp_pass == 2) { \
+ rdp_start_prod = rdp_find(name, K_PRIMARY, RDP_OLD); rdp_start_prod->call_count++;  \
+*****
+
+Resync Failed.  Files are too different.
+***** rdparser.c
+}
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+                        scan_();
+                }
+                else
+                if (scan_test(NULL, RDP_T_POST_PARSE, NULL))
+                {
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_POST_PARSE, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+                        scan_();
+                        s = code(rdp_add_child("code", rdp_tree));
+                         rdp_dir_post_parse = s; 
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+                        scan_();
+                }
+                else
+                if (scan_test(NULL, RDP_T_PRE_PARSE, NULL))
+                {
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_PRE_PARSE, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+                        scan_();
+                        s = code(rdp_add_child("code", rdp_tree));
+                         rdp_dir_pre_parse = s; 
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+                        scan_();
+                }
+                else
+                if (scan_test(NULL, RDP_T_GLOBAL, NULL))
+                {
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_GLOBAL, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+                        scan_();
+                        s = code(rdp_add_child("code", rdp_tree));
+                         rdp_dir_global = s; 
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+                        scan_();
+                }
+                else
+                if (scan_test(NULL, RDP_T_SUFFIX, NULL))
+                {
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_SUFFIX, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+                        scan_();
+                        s = String(rdp_add_child("String", rdp_tree));
+                         rdp_dir_suffix = s; 
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+                        scan_();
+                }
+                else
+                if (scan_test(NULL, RDP_T_TITLE, NULL))
+                {
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_TITLE, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+                        scan_();
+                        s = String(rdp_add_child("String", rdp_tree));
+                         rdp_dir_title = s; 
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+                        scan_();
+                }
+                else
+                if (scan_test(NULL, RDP_T_MAX_ERRORS, NULL))
+                {
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_MAX_ERRORS, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+                        scan_();
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, SCAN_P_INTEGER, &dir_stop);
+                        n = SCAN_CAST->data.i;
+                        scan_();
+                         rdp_dir_max_errors = (unsigned) n; 
+                        if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+                        scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+                        scan_();
+                }
+                else
+                if (scan_test(NULL, RDP_T_MAX_WARNINGS, NULL))
+***** RDP\RDPARSER.C
+}
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+      scan_();
+    }
+    else
+    if (scan_test(NULL, RDP_T_POST_PARSE, NULL))
+    {
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_POST_PARSE, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+      scan_();
+      s = code(rdp_add_child("code", rdp_tree));
+       rdp_dir_post_parse = s; 
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+      scan_();
+    }
+    else
+    if (scan_test(NULL, RDP_T_PRE_PARSE, NULL))
+    {
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_PRE_PARSE, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+      scan_();
+      s = code(rdp_add_child("code", rdp_tree));
+       rdp_dir_pre_parse = s; 
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+      scan_();
+    }
+    else
+    if (scan_test(NULL, RDP_T_GLOBAL, NULL))
+    {
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_GLOBAL, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+      scan_();
+      s = code(rdp_add_child("code", rdp_tree));
+       rdp_dir_global = s; 
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+      scan_();
+    }
+    else
+    if (scan_test(NULL, RDP_T_SUFFIX, NULL))
+    {
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_SUFFIX, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+      scan_();
+      s = String(rdp_add_child("String", rdp_tree));
+       rdp_dir_suffix = s; 
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+      scan_();
+    }
+    else
+    if (scan_test(NULL, RDP_T_TITLE, NULL))
+    {
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_TITLE, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+      scan_();
+      s = String(rdp_add_child("String", rdp_tree));
+       rdp_dir_title = s; 
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+      scan_();
+    }
+    else
+    if (scan_test(NULL, RDP_T_MAX_ERRORS, NULL))
+    {
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_MAX_ERRORS, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_40 /* ( */, &dir_stop);
+      scan_();
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, SCAN_P_INTEGER, &dir_stop);
+      n = SCAN_CAST->data.i;
+      scan_();
+       rdp_dir_max_errors = (unsigned) n; 
+      if (rdp_tree_update) rdp_add_child(NULL, rdp_tree);
+      scan_test(NULL, RDP_T_41 /* ) */, &dir_stop);
+      scan_();
+    }
+    else
+    if (scan_test(NULL, RDP_T_MAX_WARNINGS, NULL))
+*****
+
