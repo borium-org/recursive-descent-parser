@@ -9,6 +9,7 @@ import static org.borium.rdp.Text.*;
 import static org.borium.rdp.Text.TextMessageType.*;
 
 import java.io.*;
+import java.util.ArrayList;
 
 import org.borium.rdp.RdpAux.*;
 
@@ -115,6 +116,8 @@ public class RdpPrintC extends RdpPrint
 		text_printf(";\n\n");
 		text_printf("\n\n#endif\n\n/* End of " + text_force_filetype(headerfilename, "h") + " */\n");
 		text_redirect(System.out);
+		if (headerfile != System.out)
+			headerfile.close();
 	}
 
 	public void printParser(String outputfilename, SymbolScopeData base)
@@ -482,6 +485,8 @@ public class RdpPrintC extends RdpPrint
 		text_printf("\n/* End of " + text_force_filetype(outputfilename, "c") + " */\n");
 
 		text_redirect(System.out);
+		if (parserfile != System.out)
+			parserfile.close();
 	}
 
 	public void rdp_dump_extended(SymbolScopeData base)
@@ -611,7 +616,7 @@ public class RdpPrintC extends RdpPrint
 		}
 	}
 
-	private void rdp_print_locals(RdpData base)
+	private void rdp_print_locals(RdpData base, ArrayList<String> localsList)
 	{
 		if (!rdp_production_set.includes(base.kind))
 		{
@@ -622,17 +627,19 @@ public class RdpPrintC extends RdpPrint
 		{
 			if (list.production.kind != K_PRIMARY)
 			{
-				rdp_print_locals(list.production);
+				rdp_print_locals(list.production, localsList);
 			}
 
 			if (list.return_name != null)
 			{
-				if (symbol_lookup_key(locals, list.return_name, null) == null)
+				// if (symbol_lookup_key(locals, list.return_name, null) == null)
+				if (!localsList.contains(list.return_name))
 				{
 					LocalsData local = new LocalsData();
 
 					local.id = text_insert_string(list.return_name);
 					symbol_insert_symbol(locals, local);
+					localsList.add(list.return_name);
 
 					text_printf("  " + list.production.return_type);
 					for (int temp_int = 0; temp_int < list.production.return_type_stars; temp_int++)
@@ -966,11 +973,12 @@ public class RdpPrintC extends RdpPrint
 						text_printf("*");
 					}
 					text_printf(" result;\n");
+					temp.locals.add("result");
 				}
 
 				if (!rdp_parser_only.value())
 				{
-					rdp_print_locals(temp);
+					rdp_print_locals(temp, temp.locals);
 				}
 				local_scope.unlinkScope();
 

@@ -10,6 +10,8 @@ import static org.borium.rdp.Symbol.*;
 import static org.borium.rdp.Text.*;
 import static org.borium.rdp.Text.TextMessageType.*;
 
+import java.util.ArrayList;
+
 import org.borium.rdp.Arg.*;
 
 public class RdpAux
@@ -101,6 +103,8 @@ public class RdpAux
 		RdpData supplementary_token;
 		/** extended keyword close string */
 		String close;
+		
+		ArrayList<String> locals=new ArrayList<>();
 
 		void rdp_print_sub_item(boolean expand)
 		{
