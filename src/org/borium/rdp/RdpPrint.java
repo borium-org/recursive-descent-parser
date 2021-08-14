@@ -178,15 +178,56 @@ public class RdpPrint
 
 	protected int rdp_indentation;
 
-	protected void indent()
+	protected int indent()
 	{
 		for (int temp = 0; temp < rdp_indentation; temp++)
 		{
 			text_printf("  ");
 		}
+		return rdp_indentation * 2;
+	}
+
+	protected int iprint(String text)
+	{
+		return text_iprintf(text);
+	}
+
+	protected int iprintln()
+	{
+		return text_printf("\n");
+	}
+
+	protected int iprintln(String text)
+	{
+		return text_iprintf(text + "\n");
+	}
+
+	protected int print(String fmt)
+	{
+		return text_printf(fmt);
+	}
+
+	protected int println()
+	{
+		return text_printf("\n");
+	}
+
+	protected int println(String text)
+	{
+		return text_printf(text + "\n");
 	}
 
 	protected void rdp_print_parser_production_name(RdpData n)
+	{
+		rdp_print_parser_production_name(n, true);
+	}
+
+	protected void rdp_print_parser_production_name_no_comment(RdpData n)
+	{
+		rdp_print_parser_production_name(n, false);
+	}
+
+	private void rdp_print_parser_production_name(RdpData n, boolean printComment)
 	{
 		switch (n.kind)
 		{
@@ -195,7 +236,16 @@ public class RdpPrint
 			break;
 		case K_EXTENDED:
 		case K_TOKEN:
-			text_printf(text_get_string(n.token_enum));
+		{
+			String tokenName = text_get_string(n.token_enum);
+			if (!printComment)
+			{
+				int pos = tokenName.indexOf(' ');
+				if (pos != -1)
+					tokenName = tokenName.substring(0, pos);
+			}
+			text_printf(tokenName);
+		}
 			break;
 		case K_INTEGER:
 		case K_REAL:
@@ -210,5 +260,18 @@ public class RdpPrint
 			}
 			break;
 		}
+	}
+
+	private int text_iprintf(String fmt)
+	{
+		int i = 0;
+		// In some cases we just iprintf("\n") and it does not need to be
+		// indented
+		if (!fmt.equals("\n"))
+		{
+			i = indent();
+		}
+		i += text_printf(fmt);
+		return i; /* return number of characters printed */
 	}
 }

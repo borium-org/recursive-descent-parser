@@ -10,7 +10,7 @@ import static org.borium.rdp.Symbol.*;
 import static org.borium.rdp.Text.*;
 import static org.borium.rdp.Text.TextMessageType.*;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import org.borium.rdp.Arg.*;
 
@@ -103,8 +103,8 @@ public class RdpAux
 		RdpData supplementary_token;
 		/** extended keyword close string */
 		String close;
-		
-		ArrayList<String> locals=new ArrayList<>();
+
+		ArrayList<String> locals = new ArrayList<>();
 
 		void rdp_print_sub_item(boolean expand)
 		{
@@ -540,11 +540,11 @@ public class RdpAux
 		// {
 		// // TODO C++
 		// }
-		// if (rdp_java_path.value() != null && rdp_prefix.value() != null)
-		// {
-		// RdpPrintJava print = new RdpPrintJava();
-		// print.print(rdp_java_path.value(), rdp_prefix.value(), rdp_base, !rdp_parser_only.value());
-		// }
+		if (rdp_java_path.value() != null && rdp_java_prefix.value() != null)
+		{
+			RdpPrintJava print = new RdpPrintJava(rdp_java_path.value(), rdp_java_prefix.value());
+			print.print(rdp_base, rdp_parser_only.value());
+		}
 
 		if (rdp_verbose.value() || true)
 		{
