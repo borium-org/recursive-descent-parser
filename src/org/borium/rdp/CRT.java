@@ -6,6 +6,11 @@ public class CRT
 {
 	public static final int EOF = -1;
 
+	public static String capitalizeFirst(String text)
+	{
+		return Character.toUpperCase(text.charAt(0)) + text.substring(1);
+	}
+
 	public static void fclose(InputStream file)
 	{
 		try

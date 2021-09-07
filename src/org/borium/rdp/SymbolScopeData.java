@@ -4,6 +4,16 @@ import java.util.*;
 
 public class SymbolScopeData extends Symbol
 {
+	public void assign(SymbolScopeData other)
+	{
+		next_hash = other.next_hash;
+		last_hash.set(other.last_hash.value());
+		next_scope = other.next_scope;
+		scope = other.scope;
+		hash = other.hash;
+		id = other.id;
+	}
+
 	public void unlinkScope()
 	{
 		Symbol s = this;

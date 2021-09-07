@@ -9,7 +9,7 @@ import static org.borium.rdp.Text.*;
 import static org.borium.rdp.Text.TextMessageType.*;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.util.*;
 
 import org.borium.rdp.RdpAux.*;
 
@@ -1018,18 +1018,6 @@ public class RdpPrintC extends RdpPrint
 			rdp_print_parser_item(list.production, primary, list.return_name, list.actuals, list.promote_epsilon,
 					list.promote, list.default_action);
 			list = list.next;
-		}
-	}
-
-	private void rdp_print_parser_string(String string)
-	{
-		for (char ch : string.toCharArray())
-		{
-			if (ch == '\"' || ch == '\\' || ch == '\'')
-			{
-				text_printf("\\");
-			}
-			text_printf("" + ch);
 		}
 	}
 

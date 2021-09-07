@@ -5,7 +5,8 @@ code in Java or C that implements a LL(1) parser for a BNF-described input langu
 
 # RDP History
 RDP was developed by Adrian Johnstone and Elizabeth Scott around 1994-2000 and was placed
-into public domain. Latest version was 1.6 but this code is based on version 1.5 with the
+into public domain. [Original page is here.](http://www.cs.rhul.ac.uk/research/languages/projects/rdp.html)
+Latest version was 1.6 but this code is based on version 1.5 with the
 parser grammar file  version 1.65. You can get the original 1.5 archive from
 [a link](http://www.cs.hs-rm.de/~weber/rdp). Sources and some documentation are also stored
 in the /rdp folder in this repository.

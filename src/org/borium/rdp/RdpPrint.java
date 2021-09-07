@@ -227,6 +227,18 @@ public class RdpPrint
 		rdp_print_parser_production_name(n, false);
 	}
 
+	protected void rdp_print_parser_string(String string)
+	{
+		for (char ch : string.toCharArray())
+		{
+			if (ch == '\"' || ch == '\\' || ch == '\'')
+			{
+				text_printf("\\");
+			}
+			text_printf("" + ch);
+		}
+	}
+
 	private void rdp_print_parser_production_name(RdpData n, boolean printComment)
 	{
 		switch (n.kind)

@@ -295,7 +295,6 @@ public class RdpAux
 	public static final Pointer<Boolean> rdp_trace = new Pointer<>(false);
 
 	/** symbol table for the parser */
-	@SuppressWarnings("unused")
 	private static SymbolScopeData rdp_base;
 
 	/** string from OUTPUT_FILE directive */
@@ -506,7 +505,7 @@ public class RdpAux
 		// apply token numbers to token productions
 		rdp_order_tokens(tokens_base);
 
-		SymbolScopeData rdp_base = rdp.getScope();
+		rdp_base.assign(rdp.getScope());
 		// apply token numbers to token productions
 		rdp_order_tokens(rdp_base);
 		// make a string with all token names in it
