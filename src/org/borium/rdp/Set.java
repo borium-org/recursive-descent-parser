@@ -6,12 +6,17 @@ import java.util.*;
 
 public class Set
 {
+	public interface Indent
+	{
+		int indent();
+	}
+
 	public static int set_cardinality(Set src)
 	{
 		return src == null ? 0 : src.cardinality();
 	}
 
-	public static int set_print_element(int element, String[] element_names)
+	public static int set_print_element(int element, String[] element_names, boolean comments)
 	{
 		if (element_names == null)
 		{
@@ -19,7 +24,10 @@ public class Set
 		}
 		else
 		{
-			return text_printf(element_names[element]);
+			String elementString = element_names[element];
+			if (!comments)
+				elementString = elementString.split(" ")[0];
+			return text_printf(elementString);
 		}
 	}
 
@@ -100,7 +108,32 @@ public class Set
 				text_printf("\n");
 				column = 0;
 			}
-			column += set_print_element(element, element_names);
+			column += set_print_element(element, element_names, true);
+		}
+	}
+
+	public void print(String[] element_names, int initialOffset, Indent indent, int line_length, boolean comments)
+	{
+		int column = initialOffset;
+		boolean not_first = false;
+		Integer[] elements = array();
+		for (int element : elements)
+		{
+			if (not_first)
+			{
+				column += text_printf(", ");
+			}
+			else
+			{
+				not_first = true;
+			}
+
+			if (line_length != 0 && column >= line_length)
+			{
+				text_printf("\n");
+				column = indent.indent();
+			}
+			column += set_print_element(element, element_names, comments);
 		}
 	}
 

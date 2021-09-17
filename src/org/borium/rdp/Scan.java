@@ -687,7 +687,7 @@ public class Scan
 			{
 				printScannedToken(production);
 				text_printf(" while expecting ");
-				set_print_element(valid, scan_token_names);
+				set_print_element(valid, scan_token_names, true);
 				text_printf("\n");
 				skip(stop);
 			}
@@ -723,7 +723,7 @@ public class Scan
 		{
 			text_message(TEXT_ERROR_ECHO, "Scanned ");
 		}
-		set_print_element(text_scan_data.token, scan_token_names);
+		set_print_element(text_scan_data.token, scan_token_names, true);
 	}
 
 	private static void scan_insert_comment_block(String pattern, int column, int sequence_number)
