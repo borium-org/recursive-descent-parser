@@ -250,7 +250,7 @@ public class RdpPrintJava extends RdpPrint
 			}
 			temp = (RdpData) temp.nextSymbolInScope();
 		}
-		iprintln("int RDP_TT_TOP = " + offset + ";");
+		iprintln("int RDP_TT_TOP = SCAN_P_TOP + " + offset + ";");
 		////// C
 
 		rdp_indentation--;
