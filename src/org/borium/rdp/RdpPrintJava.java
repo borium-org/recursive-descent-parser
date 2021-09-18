@@ -53,6 +53,16 @@ public class RdpPrintJava extends RdpPrint
 		return rdp_indentation * 4;
 	}
 
+	@Override
+	protected int indent(int extraIndent)
+	{
+		for (int temp = 0; temp < rdp_indentation + extraIndent; temp++)
+		{
+			text_printf("\t");
+		}
+		return rdp_indentation * 4;
+	}
+
 	private PrintStream createFile(String className)
 	{
 		PrintStream file = null;
@@ -692,15 +702,14 @@ public class RdpPrintJava extends RdpPrint
 			indent();
 		}
 
-		text_printf("{ /* Start of " + text_get_string(prod.id) + " */\n");
+		println("{");
+		rdp_indentation++;
+		iprintln("// Start of " + text_get_string(prod.id));
 
 		if (prod.ll1_violation != 0)
 		{
-			indent();
-			text_printf("/* WARNING - an LL(1) violation was detected at this point in the grammar */\n");
+			iprintln("// FIXME - an LL(1) violation was detected at this point in the grammar");
 		}
-
-		rdp_indentation++;
 
 		/* We don't need to instantiate count if hi is infinity and lo is 0 or 1 */
 		if (!((prod.hi == 0 || prod.hi == 1) && (prod.lo == 1 || prod.lo == 0)))
@@ -709,11 +718,8 @@ public class RdpPrintJava extends RdpPrint
 			text_printf("unsigned long rdp_count = 0;\n");
 		}
 
-		indent();
-		text_printf("while (true)\n");
-
-		indent();
-		text_printf("{\n");
+		iprintln("while (true)");
+		iprintln("{");
 		rdp_indentation++;
 
 		/* Put in test that first element of body matches if iterator low count > 0 and prod isn't nullable */
@@ -721,36 +727,26 @@ public class RdpPrintJava extends RdpPrint
 		{
 			indent();
 			rdp_print_parser_test(prod.id, prod.first, text_get_string(primary.id));
-			text_printf(";\n");
+			println(";");
 		}
-
-		indent();
-		text_printf("{\n");
-		rdp_indentation++;
 
 		rdp_print_parser_alternate(prod, primary);
 
-		indent();
-		text_printf("}\n");
-		rdp_indentation--;
-
 		if (!((prod.hi == 0 || prod.hi == 1) && (prod.lo == 1 || prod.lo == 0)))
 		{
-			indent();
-			text_printf("rdp_count++;\n");
+			iprintln("rdp_count++;");
 		}
 
 		if (prod.hi > 1) /* Don't bother testing rdp_count of hi is zero or infty */
 		{
-			indent();
-			text_printf("if (rdp_count == " + prod.hi + ") break;\n");
+			iprintln("if (rdp_count == " + prod.hi + ")");
+			iprintln(1, "break;");
 		}
 
 		if (prod.supplementary_token != null)
 		{
-			indent();
-			text_printf("if (text_scan_data.token != " + text_get_string(prod.supplementary_token.token_enum)
-					+ ") break;\n");
+			iprintln("if (text_scan_data.token != " + text_get_string(prod.supplementary_token.token_enum) + ")");
+			iprintln(1, "break;");
 
 			if (rdp_dir_tree != 0)
 			{
@@ -768,26 +764,23 @@ public class RdpPrintJava extends RdpPrint
 				}
 			}
 
-			indent();
-			text_printf("scan_();\n"); /* skip list token */
+			iprintln("scan_();"); /* skip list token */
 		}
 		else if (prod.hi != 1)
 		{
-			indent();
-			text_printf("if (!");
+			iprint("if (!");
 			rdp_print_parser_test(prod.id, prod.first, null);
-			text_printf(") break;\n");
+			println(")");
+			iprintln(1, "break;");
 		}
 
 		if (prod.hi == 1)
 		{
-			indent();
-			text_printf("break;   /* hi limit is 1! */\n");
+			iprintln("break; // hi limit is 1");
 		}
 
 		rdp_indentation--;
-		indent();
-		text_printf("}\n");
+		iprintln("}");
 
 		if (prod.lo > 1) /* test rdp_count on way out */
 		{
@@ -796,16 +789,15 @@ public class RdpPrintJava extends RdpPrint
 			text_printf("  text_message(TEXT_ERROR_ECHO, \"iteration count too low\\n\");\n");
 		}
 
+		iprintln("// End of " + text_get_string(prod.id));
 		rdp_indentation--;
-		indent();
-		text_printf("} /* end of " + text_get_string(prod.id) + " */\n");
+		iprintln("}");
 
 		if (prod.lo == 0 && (rdp_dir_tree != 0 || default_action != null))
 		{
+			iprintln("else");
 			indent();
-			text_printf("else\n");
-			indent();
-			text_printf("{\n");
+			iprintln("{");
 			rdp_indentation++;
 			indent();
 			text_printf("/* default action processing for " + text_get_string(prod.id) + "*/\n");
@@ -859,11 +851,10 @@ public class RdpPrintJava extends RdpPrint
 						text_printf("" + ch);
 					}
 				}
-				text_printf("\n"); /* terminate semantic actions tidily */
+				println(); /* terminate semantic actions tidily */
 			}
 			rdp_indentation--;
-			indent();
-			text_printf("}\n");
+			iprintln("}");
 		}
 	}
 

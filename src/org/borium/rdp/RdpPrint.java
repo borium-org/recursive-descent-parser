@@ -187,6 +187,15 @@ public class RdpPrint
 		return rdp_indentation * 2;
 	}
 
+	protected int indent(int extraIndent)
+	{
+		for (int temp = 0; temp < rdp_indentation + extraIndent; temp++)
+		{
+			text_printf("  ");
+		}
+		return rdp_indentation * 2;
+	}
+
 	protected int iprint(String text)
 	{
 		return text_iprintf(text);
@@ -195,6 +204,11 @@ public class RdpPrint
 	protected int iprintln()
 	{
 		return text_printf("\n");
+	}
+
+	protected int iprintln(int extraIndent, String text)
+	{
+		return text_iprintf(extraIndent, text + "\n");
 	}
 
 	protected int iprintln(String text)
@@ -272,6 +286,19 @@ public class RdpPrint
 			}
 			break;
 		}
+	}
+
+	private int text_iprintf(int extraIndent, String fmt)
+	{
+		int i = 0;
+		// In some cases we just iprintf("\n") and it does not need to be
+		// indented
+		if (!fmt.equals("\n"))
+		{
+			i = indent(extraIndent);
+		}
+		i += text_printf(fmt);
+		return i; /* return number of characters printed */
 	}
 
 	private int text_iprintf(String fmt)
