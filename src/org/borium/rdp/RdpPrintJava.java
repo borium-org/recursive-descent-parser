@@ -11,6 +11,7 @@ import java.io.*;
 
 import org.borium.rdp.RdpAux.*;
 
+@SuppressWarnings("unused")
 public class RdpPrintJava extends RdpPrint
 {
 	/** Path where the files will be written */
@@ -90,23 +91,38 @@ public class RdpPrintJava extends RdpPrint
 		iprintln("{");
 		rdp_indentation++;
 
+		printDeclareAllSets(base);
+		printStaticInit();
+		printInitializeAllSets(base);
+		printConstructor();
+
 		// From now on first approach is to declare all entities that are
 		// equivalent to C output counterparts
 		printFileNames();
 		printIntVariables();
 		printTokenNames();
-		printLoadKeywords();
-		printDeclareAllSets(base);
-		printInitializeAllSets(base);
 		printParserMethods(base, true);
 		printParserMethods(base, false);
 		printMainRoutine();
+
+		printLoadKeywords();
 
 		rdp_indentation--;
 		iprintln("}");
 
 		text_redirect(System.out);
 		file.close();
+	}
+
+	private void printConstructor()
+	{
+		iprintln("public Compiler()");
+		iprintln("{");
+		rdp_indentation++;
+		iprintln("loadKeywords();");
+		rdp_indentation--;
+		iprintln("}");
+		iprintln();
 	}
 
 	private void printDeclareAllSets(SymbolScopeData base)
@@ -151,14 +167,14 @@ public class RdpPrintJava extends RdpPrint
 				if (temp.first_cardinality > 1)
 				{
 					int initial = iprint(text_get_string(temp.id) + "_first.assignList(");
-					temp.first.print(rdp_enum_string, initial, this::indent, 78, false);
+					temp.first.print(rdp_enum_string, initial, this::indent, 120, false);
 					println(");");
 				}
 
 				if (temp.kind == K_PRIMARY)
 				{
 					int initial = iprint(text_get_string(temp.id) + "_stop.assignList(");
-					temp.follow.print(rdp_enum_string, initial, this::indent, 78, false);
+					temp.follow.print(rdp_enum_string, initial, this::indent, 120, false);
 					println(");");
 				}
 			}
@@ -374,6 +390,17 @@ public class RdpPrintJava extends RdpPrint
 				println();
 			}
 		}
+	}
+
+	private void printStaticInit()
+	{
+		iprintln("static");
+		iprintln("{");
+		rdp_indentation++;
+		iprintln("setInitialize();");
+		rdp_indentation--;
+		iprintln("}");
+		iprintln();
 	}
 
 	private void printTokenNames()
@@ -854,7 +881,7 @@ public class RdpPrintJava extends RdpPrint
 		case 1:
 			text_printf("(" + (rdp_error_production_name.value() ? "\"" + text_get_string(first_name) + "\"" : "null")
 					+ ", ");
-			first.print(rdp_enum_string, 78);
+			first.print(rdp_enum_string, 120);
 			break;
 		case 0:
 			System.err.println("Set " + first + " is empty");
