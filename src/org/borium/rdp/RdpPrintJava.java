@@ -320,7 +320,6 @@ public class RdpPrintJava extends RdpPrint
 
 		rdp_indentation--;
 		iprintln("}");
-		iprintln();
 	}
 
 	private void printMainRoutine()
@@ -428,46 +427,40 @@ public class RdpPrintJava extends RdpPrint
 		}
 		else
 		{
+			boolean elsePrinted = false;
 			while (list != null)
 			{
 				if (list.production.kind != K_SEQUENCE)
 				{
 					text_message(TEXT_FATAL, "internal error - expecting alternate\n");
 				}
-
-				indent();
-
-				text_printf("if (");
+				if (elsePrinted)
+					print(" if (");
+				else
+					iprint("if (");
 				rdp_print_parser_test(list.production.id, list.production.first, null);
-				text_printf(")\n");
-				indent();
-				text_printf("{\n");
+				println(")");
+				iprintln("{");
 				rdp_indentation++;
 
 				rdp_print_parser_sequence(list.production, primary);
 
 				rdp_indentation--;
-				indent();
-
-				text_printf("}\n");
+				iprintln("}");
 
 				if ((list = list.next) != null)
 				{
-					indent();
-					text_printf("else\n");
+					iprint("else");
+					elsePrinted = true;
 				}
 				else
 				/* tail test at end of alternates */
 				if (!(production.contains_null && production.lo != 0))
 				{
-					indent();
-					text_printf("else\n");
-					rdp_indentation++;
-					indent();
+					iprintln("else");
+					indent(1);
 					rdp_print_parser_test(production.id, production.first, text_get_string(primary.id));
-					rdp_indentation--;
-					indent();
-					text_printf(";\n");
+					println(";");
 				}
 			}
 		}
