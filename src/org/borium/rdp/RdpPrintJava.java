@@ -46,11 +46,7 @@ public class RdpPrintJava extends RdpPrint
 	@Override
 	protected int indent()
 	{
-		for (int temp = 0; temp < rdp_indentation; temp++)
-		{
-			text_printf("\t");
-		}
-		return rdp_indentation * 4;
+		return indent(0);
 	}
 
 	@Override
@@ -60,7 +56,7 @@ public class RdpPrintJava extends RdpPrint
 		{
 			text_printf("\t");
 		}
-		return rdp_indentation * 4;
+		return (rdp_indentation + extraIndent) * 4;
 	}
 
 	private PrintStream createFile(String className)
@@ -97,11 +93,12 @@ public class RdpPrintJava extends RdpPrint
 		iprintln("import org.borium.jrc.parser.ast.*;");
 		iprintln();
 
-		iprintln("public class Compiler");
+		iprintln("public class Compiler extends CompilerBase");
 		iprintln("{");
 		rdp_indentation++;
 
 		printDeclareAllSets(base);
+		printTokenNames();
 		printStaticInit();
 		printInitializeAllSets(base);
 		printConstructor();
@@ -110,7 +107,6 @@ public class RdpPrintJava extends RdpPrint
 		// equivalent to C output counterparts
 		printFileNames();
 		printIntVariables();
-		printTokenNames();
 		printParserMethods(base, true);
 		printParserMethods(base, false);
 		printMainRoutine();
@@ -128,9 +124,7 @@ public class RdpPrintJava extends RdpPrint
 	{
 		iprintln("public Compiler()");
 		iprintln("{");
-		rdp_indentation++;
-		iprintln("loadKeywords();");
-		rdp_indentation--;
+		iprintln(1, "loadKeywords();");
 		iprintln("}");
 		iprintln();
 	}
@@ -405,17 +399,29 @@ public class RdpPrintJava extends RdpPrint
 	{
 		iprintln("static");
 		iprintln("{");
-		rdp_indentation++;
-		iprintln("setInitialize();");
-		rdp_indentation--;
+		iprintln(1, "setInitialize();");
 		iprintln("}");
 		iprintln();
 	}
 
 	private void printTokenNames()
 	{
-		// TODO Auto-generated method stub
+		int column = iprint("public static final String[] rdp_tokens = {");
 
+		for (int token_count = 0; token_count < rdp_token_count; token_count++)
+		{
+			String tokenString = rdp_token_string[token_count];
+			if (column + tokenString.length() + 4 >= 119)
+			{
+				println();
+				column = indent(2);
+			}
+			else
+				column += print(" ");
+			column += print("\"" + tokenString + "\",");
+		}
+		println(" };");
+		println();
 	}
 
 	private void rdp_print_parser_alternate(RdpData production, RdpData primary)
